@@ -106,6 +106,35 @@ window.DapitanAPI = {
     }
   },
 
+  // Delete a report from Supabase & LocalStorage
+  async deleteReport(ref) {
+    // Update LocalStorage
+    let reports = getStoredReports();
+    reports = reports.filter(r => r.ref !== ref);
+    saveStoredReports(reports);
+
+    // Delete from Supabase
+    if (supabaseClient) {
+      try {
+        const { data, error } = await supabaseClient
+          .from('reports')
+          .delete()
+          .eq('ref', ref);
+        if (error) {
+          console.error("Error deleting from Supabase:", error.message);
+          alert("Supabase delete error: " + error.message + "\n\nMake sure the DELETE policy is added in Supabase SQL Editor:\nCREATE POLICY \"Public can delete\" ON reports FOR DELETE TO anon USING (true);");
+        } else {
+          console.log("Successfully deleted report from Supabase:", ref);
+        }
+      } catch (err) {
+        console.error("Supabase delete exception:", err);
+        alert("Delete exception: " + err.message);
+      }
+    } else {
+      console.log("Supabase not connected — deleted from LocalStorage only.");
+    }
+  },
+
   // Subscribe to real-time changes
   subscribeToReports(callback) {
     if (supabaseClient) {
