@@ -16,17 +16,8 @@ if (typeof supabase !== 'undefined' && SUPABASE_URL !== "YOUR_SUPABASE_URL" && S
 // LocalStorage key for fallback offline storage
 const LOCAL_STORAGE_KEY = 'dapitan_pnp_reports';
 
-// Default initial dataset
-const INITIAL_REPORTS = [
-  {ref:'PNP-2026-004821', type:'Incident — Theft', date:'20 Jul, 07:42H', location:'Purok 3, Barangay Sta. Cruz', status:'new', details:'Complainant reports a stolen motorcycle parked outside residence overnight. No witnesses identified yet.', contact:'Anonymous'},
-  {ref:'PNP-2026-004819', type:'Feedback', date:'20 Jul, 06:15H', location:'Station 3, Traffic Division', status:'review', details:'Positive feedback regarding assistance received during a vehicular accident report.', contact:'J. Ramos · 09xx-xxx-1122'},
-  {ref:'PNP-2026-004812', type:'Incident — Disturbance', date:'19 Jul, 22:03H', location:'Rizal Street corner Burgos', status:'review', details:'Noise complaint regarding a karaoke gathering past barangay curfew hours.', contact:'Anonymous'},
-  {ref:'PNP-2026-004807', type:'Commendation', date:'19 Jul, 18:47H', location:'PO2 R. Mendoza, Station 1', status:'closed', details:'Commended for assistance rendered during a medical emergency response.', contact:'M. Villanueva · mv@email.com'},
-  {ref:'PNP-2026-004799', type:'Incident — Traffic', date:'19 Jul, 15:20H', location:'National Highway, Brgy. Dawo', status:'closed', details:'Reported reckless driving by a delivery motorcycle; plate number partially noted.', contact:'Anonymous'},
-  {ref:'PNP-2026-004791', type:'Incident — Suspicious Activity', date:'19 Jul, 11:05H', location:'Purok 7, Barangay Polo', status:'new', details:'Unfamiliar individuals observed surveying vacant lots in the area over several days.', contact:'Anonymous'},
-  {ref:'PNP-2026-004788', type:'Feedback', date:'18 Jul, 20:30H', location:'Records Section', status:'closed', details:'Feedback on long wait times for police clearance processing.', contact:'D. Aquino · 09xx-xxx-4410'},
-  {ref:'PNP-2026-004780', type:'Commendation', date:'18 Jul, 16:12H', location:'PO1 S. Reyes, Station 2', status:'new', details:'Praised for de-escalating a public dispute calmly and professionally.', contact:'Anonymous'}
-];
+// Default initial dataset (empty for real production police portal)
+const INITIAL_REPORTS = [];
 
 function getStoredReports() {
   const localData = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -37,8 +28,7 @@ function getStoredReports() {
       console.error("Failed to parse LocalStorage data:", e);
     }
   }
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_REPORTS));
-  return INITIAL_REPORTS;
+  return [];
 }
 
 function saveStoredReports(reports) {
@@ -47,7 +37,7 @@ function saveStoredReports(reports) {
 
 // Global API helper methods
 window.DapitanAPI = {
-  // Fetch all reports (Supabase or LocalStorage fallback)
+  // Fetch all reports directly from real Supabase table
   async fetchReports() {
     if (supabaseClient) {
       try {
@@ -55,13 +45,13 @@ window.DapitanAPI = {
           .from('reports')
           .select('*')
           .order('created_at', { ascending: false });
-        if (!error && data && data.length > 0) {
+        if (!error && data) {
           return data;
         } else if (error) {
-          console.warn("Supabase fetch error, using LocalStorage fallback:", error.message);
+          console.warn("Supabase fetch error:", error.message);
         }
       } catch (err) {
-        console.warn("Supabase fetch exception, using LocalStorage fallback:", err);
+        console.warn("Supabase fetch exception:", err);
       }
     }
     return getStoredReports();

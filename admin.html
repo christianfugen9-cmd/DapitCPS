@@ -168,6 +168,14 @@
   .chip-count{display:inline-block; font-size:10px; background:rgba(0,0,0,.12); padding:1px 6px; border-radius:10px; margin-left:4px;}
   .chip.active .chip-count{background:rgba(255,255,255,.25);}
 
+  .btn-add-entry{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--gold); color:var(--ink-deep); font-weight:700; font-size:13px;
+    padding:9px 16px; border-radius:6px; border:none; cursor:pointer;
+    font-family:'Public Sans',sans-serif; transition:background .15s ease, transform .12s ease;
+  }
+  .btn-add-entry:hover{background:#d3b266; transform:translateY(-1px);}
+
   .table-wrap{background:var(--paper-raised); border:1px solid var(--line); border-radius:8px; overflow:hidden;}
   table.admin-table{width:100%; border-collapse:collapse; font-size:13.5px;}
   table.admin-table th{
@@ -265,7 +273,7 @@
           </div>
           <button type="submit" class="btn btn-primary">Log in</button>
         </form>
-        <div class="login-foot">Unauthorized access attempts are logged.<br>Demo credentials: <strong>admin</strong> / <strong>admin123</strong></div>
+        <div class="login-foot">Unauthorized access attempts are logged.</div>
       </div>
     </div>
     <a class="login-back" href="pnp-portal.html">← Back to public site</a>
@@ -330,6 +338,10 @@
           <h1>Good day, Duty Officer</h1>
           <div class="sub">Here's what's come in across all stations today, 22 Jul 2026.</div>
         </div>
+        <button class="btn-add-entry openAddModalBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          + Log New Entry
+        </button>
       </div>
 
       <div class="stat-grid">
@@ -386,6 +398,10 @@
           <h1>All Submissions</h1>
           <div class="sub">Complete log of all incident reports, public feedback, and officer commendations.</div>
         </div>
+        <button class="btn-add-entry openAddModalBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          + Log New Entry
+        </button>
       </div>
 
       <div class="table-toolbar">
@@ -411,7 +427,17 @@
       </div>
     </div>
     <div class="view" id="view-blotter" style="display:none;">
-      <div class="main-head"><div><div class="eyebrow">Blotter</div><h1>Blotter Log</h1><div class="sub">Log of official police blotter entries and public record incident digests.</div></div></div>
+      <div class="main-head">
+        <div>
+          <div class="eyebrow">Blotter</div>
+          <h1>Blotter Log</h1>
+          <div class="sub">Log of official police blotter entries and public record incident digests.</div>
+        </div>
+        <button class="btn-add-entry openAddModalBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          + Log New Entry
+        </button>
+      </div>
       <div class="table-wrap">
         <table class="admin-table">
           <thead>
@@ -492,6 +518,58 @@
     </select>
     <button id="drawerSave">Update</button>
   </div>
+<!-- ===================== ADD ENTRY DRAWER ===================== -->
+<div class="drawer-overlay" id="addModalOverlay"></div>
+<div class="drawer" id="addModalDrawer">
+  <div class="drawer-head">
+    <div>
+      <div class="dh-ref">NEW ENTRY FORM</div>
+      <h3>Log Incident / Blotter Record</h3>
+    </div>
+    <button class="drawer-close" id="addModalClose" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <form id="addEntryForm" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
+    <div class="drawer-body">
+      <div class="field" style="margin-bottom:14px;">
+        <label style="font-family:'Space Mono',monospace; font-size:10.5px; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:5px;">Classification / Type</label>
+        <select id="newTypeSelect" style="width:100%; padding:10px; border:1px solid var(--line); border-radius:6px; font-family:'Public Sans',sans-serif;" required>
+          <option value="Incident — Theft">Incident — Theft</option>
+          <option value="Incident — Disturbance">Incident — Disturbance</option>
+          <option value="Incident — Traffic">Incident — Traffic</option>
+          <option value="Incident — Suspicious Activity">Incident — Suspicious Activity</option>
+          <option value="Incident — Property Damage">Incident — Property Damage</option>
+          <option value="Blotter Entry">Blotter Entry</option>
+          <option value="Feedback">Feedback</option>
+          <option value="Commendation">Commendation</option>
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:14px;">
+        <label style="font-family:'Space Mono',monospace; font-size:10.5px; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:5px;">Location / Subject</label>
+        <input type="text" id="newLocationInput" placeholder="e.g. Purok 3, Barangay Sta. Cruz" style="width:100%; padding:10px; border:1px solid var(--line); border-radius:6px; font-family:'Public Sans',sans-serif;" required>
+      </div>
+      <div class="field" style="margin-bottom:14px;">
+        <label style="font-family:'Space Mono',monospace; font-size:10.5px; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:5px;">Complainant / Contact Info</label>
+        <input type="text" id="newContactInput" placeholder="e.g. J. Dela Cruz · 0917-xxx-xxxx or Anonymous" style="width:100%; padding:10px; border:1px solid var(--line); border-radius:6px; font-family:'Public Sans',sans-serif;" required>
+      </div>
+      <div class="field" style="margin-bottom:14px;">
+        <label style="font-family:'Space Mono',monospace; font-size:10.5px; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:5px;">Initial Status</label>
+        <select id="newStatusSelect" style="width:100%; padding:10px; border:1px solid var(--line); border-radius:6px; font-family:'Public Sans',sans-serif;">
+          <option value="new">New / Logged</option>
+          <option value="review">In Review / Under Investigation</option>
+          <option value="closed">Closed / Resolved</option>
+        </select>
+      </div>
+      <div class="field">
+        <label style="font-family:'Space Mono',monospace; font-size:10.5px; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:5px;">Incident Details &amp; Notes</label>
+        <textarea id="newDetailsInput" rows="4" placeholder="Enter complete details of the incident or blotter report…" style="width:100%; padding:10px; border:1px solid var(--line); border-radius:6px; font-family:'Public Sans',sans-serif; resize:vertical;" required></textarea>
+      </div>
+    </div>
+    <div class="drawer-actions">
+      <button type="submit" class="btn-add-entry" style="width:100%; justify-content:center; padding:12px;">Save &amp; File to Supabase</button>
+    </div>
+  </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -659,6 +737,63 @@
     renderAll();
     closeDrawer();
   });
+
+  // ===== Add Entry Modal Drawer =====
+  const addModalOverlay = document.getElementById('addModalOverlay');
+  const addModalDrawer = document.getElementById('addModalDrawer');
+  const addModalClose = document.getElementById('addModalClose');
+  const addEntryForm = document.getElementById('addEntryForm');
+
+  function openAddModal(){
+    if(addModalOverlay && addModalDrawer){
+      addModalOverlay.classList.add('show');
+      addModalDrawer.classList.add('show');
+    }
+  }
+
+  function closeAddModal(){
+    if(addModalOverlay && addModalDrawer){
+      addModalOverlay.classList.remove('show');
+      addModalDrawer.classList.remove('show');
+    }
+    if(addEntryForm) addEntryForm.reset();
+  }
+
+  document.querySelectorAll('.openAddModalBtn').forEach(btn=>{
+    btn.addEventListener('click', openAddModal);
+  });
+  if(addModalClose) addModalClose.addEventListener('click', closeAddModal);
+  if(addModalOverlay) addModalOverlay.addEventListener('click', closeAddModal);
+
+  if(addEntryForm){
+    addEntryForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, '0');
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const month = months[now.getMonth()];
+      const hours = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      const formattedDate = `${day} ${month}, ${hours}:${mins}H`;
+      const ref = 'PNP-2026-' + String(Math.floor(100000 + Math.random() * 899999));
+
+      const newReport = {
+        ref: ref,
+        type: document.getElementById('newTypeSelect').value,
+        date: formattedDate,
+        location: document.getElementById('newLocationInput').value.trim(),
+        status: document.getElementById('newStatusSelect').value,
+        details: document.getElementById('newDetailsInput').value.trim(),
+        contact: document.getElementById('newContactInput').value.trim()
+      };
+
+      if (window.DapitanAPI) {
+        await window.DapitanAPI.submitReport(newReport);
+      }
+      closeAddModal();
+      await loadReportsData();
+    });
+  }
 
   // ===== Sidebar view switching =====
   document.querySelectorAll('.sb-link').forEach(link=>{

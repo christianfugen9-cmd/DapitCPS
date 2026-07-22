@@ -430,9 +430,9 @@
       <h1 class="hero-title">See what's happening in your community. Tell us what you see.</h1>
       <p class="hero-sub">Real-time advisories from your local station, and a direct line back to us — for incidents, complaints, or a simple thank-you to an officer who helped you.</p>
       <div class="hero-actions">
-        <a href="#report" class="btn btn-red">Report an incident</a>
+        <a href="#report" class="btn btn-red" data-tab-link="incident">Report an incident</a>
         <a href="#updates" class="btn btn-primary">View today's updates</a>
-        <a href="#report" class="btn btn-outline">Send feedback</a>
+        <a href="#report" class="btn btn-outline" data-tab-link="feedback">Send feedback</a>
       </div>
     </div>
     <div class="hero-card">
@@ -742,8 +742,8 @@
         <h5>Services</h5>
         <ul>
           <li><a href="#updates">Public advisories</a></li>
-          <li><a href="#report">File a report</a></li>
-          <li><a href="#report">Send feedback</a></li>
+          <li><a href="#report" data-tab-link="incident">File a report</a></li>
+          <li><a href="#report" data-tab-link="feedback">Send feedback</a></li>
           <li><a href="#">Clearance &amp; certificates</a></li>
         </ul>
       </div>
@@ -785,6 +785,23 @@
       btn.setAttribute('aria-selected','true');
       document.querySelector('.tab-panel[data-panel="'+btn.dataset.tab+'"]').classList.add('active');
       document.getElementById('confirmBox').classList.remove('show');
+    });
+  });
+
+  // Handle tab links (e.g. hero buttons, header & footer links)
+  function activateTab(tabName) {
+    const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+    if(tabBtn) {
+      tabBtn.click();
+    }
+  }
+
+  document.querySelectorAll('[data-tab-link]').forEach(link => {
+    link.addEventListener('click', () => {
+      const tabTarget = link.dataset.tabLink;
+      if (tabTarget) {
+        activateTab(tabTarget);
+      }
     });
   });
 
