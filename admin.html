@@ -165,6 +165,8 @@
     padding:7px 13px; border-radius:20px; cursor:pointer;
   }
   .chip.active, .chip:hover{background:var(--ink); border-color:var(--ink); color:#fff;}
+  .chip-count{display:inline-block; font-size:10px; background:rgba(0,0,0,.12); padding:1px 6px; border-radius:10px; margin-left:4px;}
+  .chip.active .chip-count{background:rgba(255,255,255,.25);}
 
   .table-wrap{background:var(--paper-raised); border:1px solid var(--line); border-radius:8px; overflow:hidden;}
   table.admin-table{width:100%; border-collapse:collapse; font-size:13.5px;}
@@ -376,18 +378,88 @@
       </div>
     </div>
 
-    <!-- ===== Other placeholder views ===== -->
+    <!-- ===== All Submissions view ===== -->
     <div class="view" id="view-reports" style="display:none;">
-      <div class="main-head"><div><div class="eyebrow">Submissions</div><h1>All Submissions</h1><div class="sub">Use the Overview tab's search and filters — this concept shares one dataset across views.</div></div></div>
+      <div class="main-head">
+        <div>
+          <div class="eyebrow">Submissions</div>
+          <h1>All Submissions</h1>
+          <div class="sub">Complete log of all incident reports, public feedback, and officer commendations.</div>
+        </div>
+      </div>
+
+      <div class="table-toolbar">
+        <div class="search-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search reference, type, contact, or location…" id="allSearchInput">
+        </div>
+        <div class="filter-chips" id="allFilterChips">
+          <button class="chip active" data-status="all">All <span class="chip-count" id="count-all">0</span></button>
+          <button class="chip" data-status="new">New <span class="chip-count" id="count-new">0</span></button>
+          <button class="chip" data-status="review">In Review <span class="chip-count" id="count-review">0</span></button>
+          <button class="chip" data-status="closed">Closed <span class="chip-count" id="count-closed">0</span></button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Reference</th><th>Type</th><th>Submitted</th><th>Location / Subject</th><th>Contact</th><th>Status</th></tr>
+          </thead>
+          <tbody id="allReportsTbody"></tbody>
+        </table>
+      </div>
     </div>
     <div class="view" id="view-blotter" style="display:none;">
-      <div class="main-head"><div><div class="eyebrow">Blotter</div><h1>Blotter Log</h1><div class="sub">Editable version of the public-facing blotter feed would live here.</div></div></div>
+      <div class="main-head"><div><div class="eyebrow">Blotter</div><h1>Blotter Log</h1><div class="sub">Log of official police blotter entries and public record incident digests.</div></div></div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Entry No.</th><th>Date / Time</th><th>Classification</th><th>Barangay / Location</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="admin-ref">BL-2026-0089</td><td>20 Jul, 23:15H</td><td>Property Damage / Traffic Collision</td><td>Brgy. Sta. Cruz</td><td><span class="status-pill status-closed">Filed</span></td></tr>
+            <tr><td class="admin-ref">BL-2026-0088</td><td>20 Jul, 14:30H</td><td>Physical Injury Dispute</td><td>Brgy. Polo</td><td><span class="status-pill status-review">Under Investigation</span></td></tr>
+            <tr><td class="admin-ref">BL-2026-0087</td><td>19 Jul, 19:40H</td><td>Loss of Property (Document)</td><td>Brgy. Central</td><td><span class="status-pill status-closed">Blotter Issued</span></td></tr>
+            <tr><td class="admin-ref">BL-2026-0086</td><td>18 Jul, 08:20H</td><td>Trespassing / Neighborhood Dispute</td><td>Brgy. Dawo</td><td><span class="status-pill status-closed">Settled at Barangay</span></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+
     <div class="view" id="view-staff" style="display:none;">
-      <div class="main-head"><div><div class="eyebrow">Personnel</div><h1>Staff Directory</h1><div class="sub">Roster and duty assignments would live here.</div></div></div>
+      <div class="main-head"><div><div class="eyebrow">Personnel</div><h1>Staff Directory</h1><div class="sub">Station roster, duty officers, and active assignments.</div></div></div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Badge / ID</th><th>Name</th><th>Rank / Role</th><th>Assignment</th><th>Duty Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="admin-ref">PNP-OFF-0102</td><td>PMAJ Reliosa M. Santos</td><td>Station Commander</td><td>Dapitan City PS HQ</td><td><span class="status-pill status-closed">On Duty</span></td></tr>
+            <tr><td class="admin-ref">PNP-OFF-0341</td><td>PCMS Ramon G. Mendoza</td><td>Chief Investigator</td><td>Investigation & Detective Management</td><td><span class="status-pill status-closed">On Duty</span></td></tr>
+            <tr><td class="admin-ref">PNP-OFF-0489</td><td>PSSg Maria C. Villanueva</td><td>Desk Officer</td><td>Admin & Records Section</td><td><span class="status-pill status-review">On Shift</span></td></tr>
+            <tr><td class="admin-ref">PNP-OFF-0512</td><td>PCpl Samuel T. Reyes</td><td>Patrol Officer</td><td>Sub-Station 2 (Brgy. Polo)</td><td><span class="status-pill status-new">Patrol Duty</span></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+
     <div class="view" id="view-settings" style="display:none;">
-      <div class="main-head"><div><div class="eyebrow">Configuration</div><h1>Settings</h1><div class="sub">Station info, hotline numbers, and portal preferences would live here.</div></div></div>
+      <div class="main-head"><div><div class="eyebrow">Configuration</div><h1>Portal Settings</h1><div class="sub">Manage station emergency numbers, public notice banners, and portal credentials.</div></div></div>
+      <div class="stat-card" style="max-width:600px; margin-bottom:20px;">
+        <div class="field">
+          <label>Station Name</label>
+          <input type="text" value="Dapitan City Police Station (Zamboanga del Norte)" readonly style="width:100%; border:1px solid var(--line); padding:8px; border-radius:4px;">
+        </div>
+        <div class="field" style="margin-top:14px;">
+          <label>Emergency Hotline Number</label>
+          <input type="text" value="(065) 908-1111 / 0917-888-9000" readonly style="width:100%; border:1px solid var(--line); padding:8px; border-radius:4px;">
+        </div>
+        <div class="field" style="margin-top:14px;">
+          <label>Public Portal Status</label>
+          <div style="font-weight:700; color:var(--green); margin-top:4px;">● Live & Operational</div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -422,30 +494,47 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script>
-  // ===== Mock dataset =====
-  const REPORTS = [
-    {ref:'PNP-2026-004821', type:'Incident — Theft', date:'20 Jul, 07:42H', location:'Purok 3, Barangay Sta. Cruz', status:'new', details:'Complainant reports a stolen motorcycle parked outside residence overnight. No witnesses identified yet.', contact:'Anonymous'},
-    {ref:'PNP-2026-004819', type:'Feedback', date:'20 Jul, 06:15H', location:'Station 3, Traffic Division', status:'review', details:'Positive feedback regarding assistance received during a vehicular accident report.', contact:'J. Ramos · 09xx-xxx-1122'},
-    {ref:'PNP-2026-004812', type:'Incident — Disturbance', date:'19 Jul, 22:03H', location:'Rizal Street corner Burgos', status:'review', details:'Noise complaint regarding a karaoke gathering past barangay curfew hours.', contact:'Anonymous'},
-    {ref:'PNP-2026-004807', type:'Commendation', date:'19 Jul, 18:47H', location:'PO2 R. Mendoza, Station 1', status:'closed', details:'Commended for assistance rendered during a medical emergency response.', contact:'M. Villanueva · mv@email.com'},
-    {ref:'PNP-2026-004799', type:'Incident — Traffic', date:'19 Jul, 15:20H', location:'National Highway, Brgy. Dawo', status:'closed', details:'Reported reckless driving by a delivery motorcycle; plate number partially noted.', contact:'Anonymous'},
-    {ref:'PNP-2026-004791', type:'Incident — Suspicious Activity', date:'19 Jul, 11:05H', location:'Purok 7, Barangay Polo', status:'new', details:'Unfamiliar individuals observed surveying vacant lots in the area over several days.', contact:'Anonymous'},
-    {ref:'PNP-2026-004788', type:'Feedback', date:'18 Jul, 20:30H', location:'Records Section', status:'closed', details:'Feedback on long wait times for police clearance processing.', contact:'D. Aquino · 09xx-xxx-4410'},
-    {ref:'PNP-2026-004780', type:'Commendation', date:'18 Jul, 16:12H', location:'PO1 S. Reyes, Station 2', status:'new', details:'Praised for de-escalating a public dispute calmly and professionally.', contact:'Anonymous'},
-  ];
+  let REPORTS = [];
 
   const TYPE_ICON = {new:'status-new', review:'status-review', closed:'status-closed'};
   const STATUS_LABEL = {new:'New', review:'In Review', closed:'Closed'};
 
+  async function loadReportsData(){
+    if (window.DapitanAPI) {
+      REPORTS = await window.DapitanAPI.fetchReports();
+    }
+    renderAll();
+  }
+
+  function updateCounts(){
+    const total = REPORTS.length;
+    const newCount = REPORTS.filter(r=>r.status==='new').length;
+    const reviewCount = REPORTS.filter(r=>r.status==='review').length;
+    const closedCount = REPORTS.filter(r=>r.status==='closed').length;
+
+    const elAll = document.getElementById('count-all');
+    if(elAll) elAll.textContent = total;
+    const elNew = document.getElementById('count-new');
+    if(elNew) elNew.textContent = newCount;
+    const elReview = document.getElementById('count-review');
+    if(elReview) elReview.textContent = reviewCount;
+    const elClosed = document.getElementById('count-closed');
+    if(elClosed) elClosed.textContent = closedCount;
+  }
+
   function renderTable(){
     const tbody = document.getElementById('reportsTbody');
-    const activeChip = document.querySelector('.chip.active').dataset.status;
+    if(!tbody) return;
+    const activeChipEl = document.querySelector('#filterChips .chip.active');
+    const activeChip = activeChipEl ? activeChipEl.dataset.status : 'all';
     const q = document.getElementById('searchInput').value.trim().toLowerCase();
 
     const rows = REPORTS.filter(r=>{
       const statusMatch = activeChip === 'all' || r.status === activeChip;
-      const searchMatch = !q || r.ref.toLowerCase().includes(q) || r.type.toLowerCase().includes(q) || r.location.toLowerCase().includes(q);
+      const searchMatch = !q || r.ref.toLowerCase().includes(q) || r.type.toLowerCase().includes(q) || r.location.toLowerCase().includes(q) || (r.details && r.details.toLowerCase().includes(q));
       return statusMatch && searchMatch;
     });
 
@@ -460,7 +549,7 @@
         <td class="type-tag">${r.type}</td>
         <td>${r.date}</td>
         <td>${r.location}</td>
-        <td><span class="status-pill ${TYPE_ICON[r.status]}">${STATUS_LABEL[r.status]}</span></td>
+        <td><span class="status-pill ${TYPE_ICON[r.status] || 'status-new'}">${STATUS_LABEL[r.status] || 'New'}</span></td>
       </tr>
     `).join('');
 
@@ -469,12 +558,65 @@
     });
   }
 
+  function renderAllReportsTable(){
+    const tbody = document.getElementById('allReportsTbody');
+    if(!tbody) return;
+    const activeChipEl = document.querySelector('#allFilterChips .chip.active');
+    const activeChip = activeChipEl ? activeChipEl.dataset.status : 'all';
+    const searchInput = document.getElementById('allSearchInput');
+    const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+    const rows = REPORTS.filter(r=>{
+      const statusMatch = activeChip === 'all' || r.status === activeChip;
+      const searchMatch = !q || r.ref.toLowerCase().includes(q) || r.type.toLowerCase().includes(q) || r.location.toLowerCase().includes(q) || (r.details && r.details.toLowerCase().includes(q)) || (r.contact && r.contact.toLowerCase().includes(q));
+      return statusMatch && searchMatch;
+    });
+
+    if(rows.length === 0){
+      tbody.innerHTML = '<tr><td colspan="6" class="row-empty">No submissions match your search or filter.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = rows.map(r => `
+      <tr data-ref="${r.ref}">
+        <td class="admin-ref">${r.ref}</td>
+        <td class="type-tag">${r.type}</td>
+        <td>${r.date}</td>
+        <td>${r.location}</td>
+        <td>${r.contact || 'Anonymous'}</td>
+        <td><span class="status-pill ${TYPE_ICON[r.status] || 'status-new'}">${STATUS_LABEL[r.status] || 'New'}</span></td>
+      </tr>
+    `).join('');
+
+    tbody.querySelectorAll('tr').forEach(tr=>{
+      tr.addEventListener('click', ()=> openDrawer(tr.dataset.ref));
+    });
+  }
+
+  function renderAll(){
+    updateCounts();
+    renderTable();
+    renderAllReportsTable();
+  }
+
   document.getElementById('searchInput').addEventListener('input', renderTable);
-  document.querySelectorAll('.chip').forEach(chip=>{
+  document.querySelectorAll('#filterChips .chip').forEach(chip=>{
     chip.addEventListener('click', ()=>{
-      document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      document.querySelectorAll('#filterChips .chip').forEach(c=>c.classList.remove('active'));
       chip.classList.add('active');
       renderTable();
+    });
+  });
+
+  const allSearchEl = document.getElementById('allSearchInput');
+  if(allSearchEl){
+    allSearchEl.addEventListener('input', renderAllReportsTable);
+  }
+  document.querySelectorAll('#allFilterChips .chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      document.querySelectorAll('#allFilterChips .chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      renderAllReportsTable();
     });
   });
 
@@ -492,9 +634,9 @@
     document.getElementById('drawerDate').textContent = r.date;
     document.getElementById('drawerType').textContent = r.type;
     document.getElementById('drawerLocation').textContent = r.location;
-    document.getElementById('drawerDetails').textContent = r.details;
-    document.getElementById('drawerContact').textContent = r.contact;
-    document.getElementById('drawerStatusSelect').value = r.status;
+    document.getElementById('drawerDetails').textContent = r.details || 'No details provided.';
+    document.getElementById('drawerContact').textContent = r.contact || 'Anonymous';
+    document.getElementById('drawerStatusSelect').value = r.status || 'new';
     drawer.classList.add('show');
     drawerOverlay.classList.add('show');
   }
@@ -506,11 +648,15 @@
   document.getElementById('drawerClose').addEventListener('click', closeDrawer);
   drawerOverlay.addEventListener('click', closeDrawer);
 
-  document.getElementById('drawerSave').addEventListener('click', ()=>{
+  document.getElementById('drawerSave').addEventListener('click', async ()=>{
     const r = REPORTS.find(x => x.ref === currentRef);
     if(!r) return;
-    r.status = document.getElementById('drawerStatusSelect').value;
-    renderTable();
+    const newStatus = document.getElementById('drawerStatusSelect').value;
+    r.status = newStatus;
+    if (window.DapitanAPI) {
+      await window.DapitanAPI.updateReportStatus(currentRef, newStatus);
+    }
+    renderAll();
     closeDrawer();
   });
 
@@ -521,6 +667,7 @@
       link.classList.add('active');
       document.querySelectorAll('.view').forEach(v=> v.style.display = 'none');
       document.getElementById('view-' + link.dataset.view).style.display = 'block';
+      loadReportsData();
     });
   });
 
@@ -530,15 +677,17 @@
   const loginForm = document.getElementById('loginForm');
   const loginError = document.getElementById('loginError');
 
-  loginForm.addEventListener('submit', (e)=>{
+  loginForm.addEventListener('submit', async (e)=>{
     e.preventDefault();
     const user = document.getElementById('login-user').value.trim();
     const pass = document.getElementById('login-pass').value;
-    // Demo-only check — a real deployment would verify against a secure backend.
     if(user.toLowerCase() === 'admin' && pass === 'admin123'){
       loginScreen.style.display = 'none';
       dashboard.classList.add('show');
-      renderTable();
+      await loadReportsData();
+      if (window.DapitanAPI) {
+        window.DapitanAPI.subscribeToReports(()=> loadReportsData());
+      }
     } else {
       loginError.classList.add('show');
     }

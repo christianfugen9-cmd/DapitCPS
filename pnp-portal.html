@@ -436,9 +436,9 @@
       </div>
     </div>
     <div class="hero-card">
-      <div class="cap">Blotter snapshot — today</div>
+      <div class="cap">Advisories snapshot — today</div>
       <div class="num">14</div>
-      <div class="desc">new entries logged across all divisions</div>
+      <div class="desc">active bulletins logged across all divisions</div>
       <ul class="hero-mini-list">
         <li><span>Community advisories</span><span>08</span></li>
         <li><span>Traffic notices</span><span>04</span></li>
@@ -500,8 +500,8 @@
     <div class="blotter-wrap">
       <div class="blotter-head">
         <div>
-          <div class="title">The Daily Blotter</div>
-          <div class="sub">LOG OPENED 20 JUL 2026, 00:00H — AUTO-UPDATED HOURLY</div>
+          <div class="title">Public Advisories &amp; Bulletins</div>
+          <div class="sub">STATION BULLETIN — AUTO-UPDATED HOURLY</div>
         </div>
         <div class="filters" role="group" aria-label="Filter updates by category">
           <button class="filter-btn active" data-filter="all">All</button>
@@ -557,7 +557,7 @@
         <div class="status">Closed</div>
       </div>
 
-      <div class="blotter-foot"><a href="#">View the full blotter archive →</a></div>
+      <div class="blotter-foot"><span style="color:#8A93A3; font-size:12px;">🔒 Official Police Blotter records are restricted for authorized personnel. Duty officers can access the full Blotter Log via <a href="admin.html" style="color:var(--gold); text-decoration:underline;">Staff Login</a>.</span></div>
     </div>
   </div>
 </section>
@@ -741,7 +741,7 @@
       <div>
         <h5>Services</h5>
         <ul>
-          <li><a href="#updates">Daily blotter</a></li>
+          <li><a href="#updates">Public advisories</a></li>
           <li><a href="#report">File a report</a></li>
           <li><a href="#report">Send feedback</a></li>
           <li><a href="#">Clearance &amp; certificates</a></li>
@@ -796,10 +796,75 @@
     });
   }
 
-  // Fake submission with generated reference number
-  document.getElementById('intakeForm').addEventListener('submit', (e)=>{
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+  // Real submission with Supabase & LocalStorage integration
+  document.getElementById('intakeForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
+
+    const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab || 'incident';
     const ref = 'PNP-2026-' + String(Math.floor(100000 + Math.random()*899999));
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) + ', ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + 'H';
+
+    let type = 'Incident';
+    let location = 'Dapitan City';
+    let details = '';
+    let contact = 'Anonymous';
+
+    if (activeTab === 'incident') {
+      const incType = document.getElementById('inc-type').value;
+      type = 'Incident — ' + incType;
+      location = document.getElementById('inc-location').value.trim() || 'Unspecified Location';
+      details = document.getElementById('inc-details').value.trim() || 'No details provided.';
+      const isAnon = document.getElementById('inc-anon').checked;
+      if (!isAnon) {
+        const name = document.getElementById('inc-name').value.trim();
+        const info = document.getElementById('inc-contact').value.trim();
+        if (name || info) {
+          contact = [name, info].filter(Boolean).join(' · ');
+        }
+      }
+    } else if (activeTab === 'feedback') {
+      const station = document.getElementById('fb-station').value.trim();
+      const rating = document.getElementById('fb-rating').value;
+      type = 'Feedback (' + rating + ')';
+      location = station || 'General Feedback';
+      details = document.getElementById('fb-details').value.trim() || 'No feedback details provided.';
+      const name = document.getElementById('fb-name').value.trim();
+      const info = document.getElementById('fb-contact').value.trim();
+      if (name || info) {
+        contact = [name, info].filter(Boolean).join(' · ');
+      }
+    } else if (activeTab === 'commend') {
+      const officer = document.getElementById('cm-officer').value.trim();
+      const station = document.getElementById('cm-station').value.trim();
+      type = 'Commendation' + (officer ? ' — ' + officer : '');
+      location = station || 'Dapitan City PS';
+      details = document.getElementById('cm-details').value.trim() || 'No commendation details provided.';
+      const name = document.getElementById('cm-name').value.trim();
+      const info = document.getElementById('cm-contact').value.trim();
+      if (name || info) {
+        contact = [name, info].filter(Boolean).join(' · ');
+      }
+    }
+
+    const newReport = {
+      ref: ref,
+      type: type,
+      date: dateStr,
+      location: location,
+      status: 'new',
+      details: details,
+      contact: contact
+    };
+
+    if (window.DapitanAPI) {
+      await window.DapitanAPI.submitReport(newReport);
+    }
+
     document.getElementById('confirmRef').textContent = 'Reference No. ' + ref;
     const box = document.getElementById('confirmBox');
     box.classList.add('show');
