@@ -237,7 +237,28 @@
     .stat-grid{grid-template-columns:1fr 1fr;}
     table.admin-table{font-size:12.5px;}
     table.admin-table th, table.admin-table td{padding:10px 12px;}
+    .table-wrap{overflow-x:auto;}
     .drawer{max-width:100%;}
+  }
+
+  @media (max-width:600px){
+    .main{padding:16px 12px 40px;}
+    .main-head h1{font-size:22px;}
+    .table-toolbar{flex-direction:column; align-items:stretch;}
+    .search-box{max-width:100%;}
+    .filter-chips{overflow-x:auto; padding-bottom:6px;}
+    .stat-card{padding:14px;}
+    .stat-card .value{font-size:24px;}
+    .login-wrap{padding:12px;}
+    .login-panel .lp-body{padding:18px;}
+  }
+
+  @media (max-width:480px){
+    .stat-grid{grid-template-columns:1fr;}
+    .login-badge .name{font-size:16px;}
+    .sb-link{padding:8px 10px; font-size:12px;}
+    .chip{padding:5px 10px; font-size:10px;}
+  }
 </style>
 </head>
 <body>

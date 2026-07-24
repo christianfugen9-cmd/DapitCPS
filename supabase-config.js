@@ -32,7 +32,29 @@ function getStoredReports() {
 }
 
 function saveStoredReports(reports) {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reports));
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reports));
+  } catch (e) {
+    console.warn("LocalStorage quota exceeded or save error. Pruning old items...", e);
+    try {
+      // Keep max 30 most recent items
+      const trimmed = reports.slice(0, 30);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(trimmed));
+    } catch (e2) {
+      try {
+        // Strip heavy base64 images from older items to free up space
+        const stripped = reports.slice(0, 15).map((r, idx) => {
+          if (idx > 0 && r.image_url && r.image_url.startsWith('data:image')) {
+            return { ...r, image_url: '[Photo Attached]' };
+          }
+          return r;
+        });
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stripped));
+      } catch (e3) {
+        console.error("LocalStorage quota full. Operating gracefully without LocalStorage persistence.", e3);
+      }
+    }
+  }
 }
 
 // Helper: Haversine distance formula in meters between two lat/lng points
@@ -51,7 +73,7 @@ function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
 
 // Global API helper methods
 window.DapitanAPI = {
-  // Upload photo attachment to Supabase Storage (or convert to Base64 fallback)
+  // Upload photo attachment to Supabase Storage (or convert to compressed Base64 fallback)
   async uploadReportImage(file) {
     if (!file) return null;
 
@@ -89,11 +111,35 @@ window.DapitanAPI = {
       }
     }
 
-    // Fallback: Convert to Base64 Data URL for local & DB storage
+    // Fallback: Compress and convert to lightweight Base64 Data URL (Max 800px, 0.7 quality)
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (e) => reject(new Error("Failed to read image file."));
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 800;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.7));
+        };
+        img.onerror = () => resolve(e.target.result);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error("Failed to read image file."));
       reader.readAsDataURL(file);
     });
   },
@@ -162,18 +208,17 @@ window.DapitanAPI = {
     reports.unshift(newReport);
     saveStoredReports(reports);
 
-    // Save to Supabase if configured
+    // Save to Supabase asynchronously in background so client response is instant
     if (supabaseClient) {
-      try {
-        const { data, error } = await supabaseClient.from('reports').insert([newReport]);
+      supabaseClient.from('reports').insert([newReport]).then(({ data, error }) => {
         if (error) {
-          console.error("Error inserting into Supabase table 'reports':", error.message);
+          console.warn("Supabase insert warning:", error.message);
         } else {
-          console.log("Successfully saved report to Supabase:", data);
+          console.log("Saved report to Supabase:", data);
         }
-      } catch (err) {
-        console.error("Supabase insert exception:", err);
-      }
+      }).catch(err => {
+        console.warn("Supabase insert exception:", err);
+      });
     }
     return newReport;
   },

@@ -26,6 +26,7 @@
     --muted:#5B6472;
     --line:#D2D2C8;
     --green:#2F6B4F;
+    --amber:#D97706;
     --radius:2px;
   }
   *{box-sizing:border-box;}
@@ -306,8 +307,9 @@
     border-radius:var(--radius);
     max-width:940px; margin:0 auto;
     overflow:hidden;
+    position:relative;
   }
-  .report-sidebar{background:var(--ink-deep); padding:26px 0;}
+  .report-sidebar{background:var(--ink-deep); padding:26px 0; position:relative; z-index:2;}
   .sidebar-label{
     font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; color:var(--gold);
     padding:0 22px 18px; margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,.12);
@@ -323,6 +325,7 @@
   .tab-btn .t-desc{font-size:11.5px; color:#7C879B; line-height:1.4;}
   .tab-btn.active{background:rgba(255,255,255,.06); border-left-color:var(--gold);}
   .tab-btn.active .t-title{color:#fff;}
+
   .report-content{padding:30px 34px 34px;}
   .tab-panel{display:none;}
   .tab-panel.active{display:block;}
@@ -388,10 +391,11 @@
     .reach-row .reach-text{grid-area:text;}
     .reach-row .reach-go{grid-area:go; justify-self:start;}
     .report-shell{grid-template-columns:1fr;}
-    .report-sidebar{display:flex; overflow-x:auto; padding:14px 10px; gap:4px;}
+    .report-sidebar{display:flex; padding:6px 8px; gap:4px; background:var(--ink-deep);}
     .sidebar-label{display:none;}
-    .tab-btn{flex:none; min-width:170px; border-left:none; border-bottom:3px solid transparent; padding:10px 14px;}
-    .tab-btn.active{border-bottom-color:var(--gold);}
+    .tab-btn{flex:1 1 0px; min-width:0; border-left:none; border-bottom:3px solid transparent; padding:10px 6px; text-align:center; justify-content:center;}
+    .tab-btn.active{border-bottom-color:var(--gold); background:rgba(255,255,255,.08);}
+    .tab-btn .t-title{font-size:12.5px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
     .tab-btn .t-desc{display:none;}
     .entry{grid-template-columns:1fr; gap:8px;}
     .entry .status{text-align:left;}
@@ -400,6 +404,93 @@
     .foot-grid{grid-template-columns:1fr 1fr;}
     nav.main{display:none;}
     .field-row{grid-template-columns:1fr;}
+  }
+
+  /* ===== Tablet & large mobile (<=640px) ===== */
+  @media (max-width: 640px){
+    .container{padding:0 16px;}
+    .section{padding:48px 0;}
+    .hotline-strip .container{flex-direction:column; align-items:flex-start; gap:6px; padding-top:10px; padding-bottom:10px;}
+    .hotline-strip .items{flex-wrap:wrap; gap:6px;}
+    .hotline-status{font-size:10.5px;}
+    .nav-row{padding:10px 0;}
+    .brand-text .name{font-size:16px;}
+    .badge{width:34px;}
+    .nav-cta{padding:8px 14px 8px 12px; font-size:12.5px;}
+    .staff-login-link{padding:7px 10px; font-size:12px;}
+    .hero{padding:48px 0 40px;}
+    .hero-title{font-size:clamp(24px,5vw,36px);}
+    .hero-sub{font-size:14px;}
+    .hero-actions{flex-direction:column; gap:10px;}
+    .btn{width:100%; text-align:center; justify-content:center;}
+    .section-head{flex-direction:column; align-items:flex-start; gap:10px; margin-bottom:24px;}
+    .section-head h2{font-size:clamp(20px,4vw,28px);}
+    .reach-row{padding:18px 12px;}
+    .reach-text h3{font-size:15px;}
+    .reach-text p{font-size:13px;}
+    .report-content{padding:20px 18px 24px;}
+    .report-shell{box-shadow:3px 3px 0 var(--manila-deep);}
+    .tab-btn{padding:8px 4px;}
+    .tab-btn .t-title{font-size:11.5px;}
+    .tally-grid{grid-template-columns:1fr 1fr;}
+    .tally-cell{padding:20px 16px;}
+    .tally-cell .value{font-size:28px;}
+    .foot-grid{grid-template-columns:1fr; gap:24px;}
+    .foot-bottom{flex-direction:column; align-items:center; text-align:center; gap:6px;}
+    .blotter-head{flex-direction:column; align-items:flex-start; gap:12px;}
+    .filters{gap:6px;}
+    .filter-btn{font-size:10.5px; padding:5px 10px;}
+    .entry{padding:16px 18px;}
+    .confirm-box{padding:16px;}
+  }
+
+  /* ===== Small mobile (<=480px) ===== */
+  @media (max-width: 480px){
+    .container{padding:0 12px;}
+    .section{padding:36px 0;}
+    .hotline-pill{font-size:11px; padding:3px 10px;}
+    .hotline-pill.emergency{padding:3px 10px;}
+    .nav-row{padding:8px 0;}
+    .brand-text .eyebrow{font-size:8.5px; letter-spacing:.1em;}
+    .brand-text .name{font-size:14px;}
+    .badge{width:30px;}
+    .nav-cta{padding:7px 12px; font-size:12px; gap:5px;}
+    .nav-cta svg{display:none;}
+    .staff-login-link{display:none;}
+    .hero{padding:36px 0 30px;}
+    .hero-eyebrow{font-size:11px;}
+    .hero-title{font-size:clamp(20px,6vw,28px); line-height:1.25;}
+    .hero-sub{font-size:13px; line-height:1.55;}
+    .hero-actions{gap:8px;}
+    .btn{padding:11px 16px; font-size:13px;}
+    .section-head h2{font-size:clamp(18px,5vw,24px);}
+    .section-head p{font-size:13.5px;}
+    .reach-row{grid-template-columns:1fr; grid-template-areas:"num" "icon" "text" "go"; padding:14px 12px; gap:8px;}
+    .reach-row .reach-icon{justify-self:start; width:38px; height:38px;}
+    .reach-text h3{font-size:14px;}
+    .reach-go{font-size:12.5px;}
+    .blotter-head{padding:14px 16px;}
+    .entry{padding:14px 16px;}
+    .entry .no{font-size:11.5px;}
+    .entry .body h4{font-size:14px;}
+    .entry .body p{font-size:12.5px;}
+    .tag{font-size:9.5px; padding:3px 7px;}
+    .report-content{padding:16px 14px 20px;}
+    .field label{font-size:12.5px;}
+    .field input,.field select,.field textarea{padding:9px 11px; font-size:13.5px;}
+    .field textarea{min-height:100px;}
+    .anon-toggle{padding:10px 12px;}
+    .submit-row .btn{width:100%;}
+    .confirm-box{padding:14px;}
+    .confirm-box .ref{font-size:15px;}
+    .tally-grid{grid-template-columns:1fr;}
+    .tally-cell{border-right:none; border-bottom:1px solid var(--line); padding:16px 14px;}
+    .tally-cell .value{font-size:26px;}
+    .foot-grid{gap:18px;}
+    .foot-grid h5{margin-bottom:10px;}
+    .tab-btn{padding:8px 2px;}
+    .tab-btn .t-title{font-size:11px;}
+    .sidebar-label{display:none;}
   }
 </style>
 </head>
@@ -610,7 +701,7 @@
       </div>
 
       <div class="report-content">
-      <form id="intakeForm">
+      <form id="intakeForm" novalidate>
         <div class="tab-panel active" data-panel="incident">
           <div class="field">
             <label for="inc-type">Type of incident</label>
@@ -631,7 +722,7 @@
             </div>
             <input id="inc-location" type="text" placeholder="Barangay, street, or landmark" required>
             <span class="field-error" id="err-inc-location" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please specify the incident location.</span>
-            <div id="inc-map-container" style="height:200px; border-radius:6px; margin-top:8px; border:1.5px solid var(--line); overflow:hidden; position:relative; z-index:1; isolation:isolate;"></div>
+            <div id="inc-map-container" style="height:200px; border-radius:6px; margin-top:8px; border:1.5px solid var(--line); overflow:hidden; position:relative;"></div>
             <input type="hidden" id="inc-lat">
             <input type="hidden" id="inc-lng">
             <span id="gps-status-text" style="font-size:11px; color:var(--muted); margin-top:4px; display:block;">Tap the map to place an exact incident pin or use Auto-Detect GPS.</span>
@@ -654,8 +745,16 @@
             <span class="field-error" id="err-inc-details" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please describe what happened.</span>
           </div>
           <div class="field-row" id="inc-contact-row">
-            <div class="field"><label for="inc-name">Full name (optional)</label><input id="inc-name" type="text"></div>
-            <div class="field"><label for="inc-contact">Phone or email (optional)</label><input id="inc-contact" type="text"></div>
+            <div class="field">
+              <label for="inc-name">Full name</label>
+              <input id="inc-name" type="text" required>
+              <span class="field-error" id="err-inc-name" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please enter your full name.</span>
+            </div>
+            <div class="field">
+              <label for="inc-contact">Phone or email</label>
+              <input id="inc-contact" type="text" required>
+              <span class="field-error" id="err-inc-contact" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please enter your phone or email.</span>
+            </div>
           </div>
 
           <!-- Mandatory False Reporting Warning & Acknowledgment -->
@@ -711,8 +810,16 @@
             <label for="fb-anon" style="margin:0; font-weight:400;">Submit this feedback anonymously</label>
           </div>
           <div class="field-row" id="fb-contact-row">
-            <div class="field"><label for="fb-name">Full name (optional)</label><input id="fb-name" type="text"></div>
-            <div class="field"><label for="fb-contact">Phone or email (optional)</label><input id="fb-contact" type="text"></div>
+            <div class="field">
+              <label for="fb-name">Full name</label>
+              <input id="fb-name" type="text" required>
+              <span class="field-error" id="err-fb-name" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please enter your full name.</span>
+            </div>
+            <div class="field">
+              <label for="fb-contact">Phone or email</label>
+              <input id="fb-contact" type="text" required>
+              <span class="field-error" id="err-fb-contact" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please enter your phone or email.</span>
+            </div>
           </div>
         </div>
 
@@ -730,8 +837,16 @@
             <textarea id="cm-details" rows="4" placeholder="Your commendation will be forwarded to their commanding officer."></textarea>
           </div>
           <div class="field-row">
-            <div class="field"><label for="cm-name">Full name</label><input id="cm-name" type="text"></div>
-            <div class="field"><label for="cm-contact">Phone or email</label><input id="cm-contact" type="text"></div>
+            <div class="field">
+              <label for="cm-name">Full name</label>
+              <input id="cm-name" type="text" required>
+              <span class="field-error" id="err-cm-name" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please enter your full name.</span>
+            </div>
+            <div class="field">
+              <label for="cm-contact">Phone or email</label>
+              <input id="cm-contact" type="text" required>
+              <span class="field-error" id="err-cm-contact" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please enter your phone or email.</span>
+            </div>
           </div>
         </div>
 
@@ -746,14 +861,25 @@
         </div>
 
         <div class="submit-row">
-          <button type="submit" class="btn btn-primary" id="btn-submit-report" disabled>Submit Report</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-report">Submit Report</button>
           <span class="hint">Reference numbers are generated instantly. Response times vary by case type.</span>
         </div>
 
         <div class="confirm-box" id="confirmBox">
-          <div class="ref" id="confirmRef">Reference No. PNP-2026-000000</div>
-          <div id="confirmTimestamp" style="font-family:'Space Mono',monospace; font-size:11.5px; color:var(--gold); margin-top:4px;">Submitted: --</div>
-          <p style="margin-top:10px;">Your submission has been received and logged under status: <strong style="color:var(--amber);">PENDING ADMIN VERIFICATION</strong>. Save this reference number to track your submission.</p>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:bold; flex:none;">✓</div>
+            <div>
+              <h3 style="margin:0; font-size:17px; color:var(--ink); font-weight:800; font-family:'Public Sans',sans-serif;">Submission Successfully Logged!</h3>
+              <span style="font-size:12px; color:var(--green); font-weight:600;">Forwarded to Dapitan City Police Station Duty Officer</span>
+            </div>
+          </div>
+          <div style="background:#fff; border:1px solid var(--line); padding:12px 14px; border-radius:6px; margin:10px 0;">
+            <div class="ref" id="confirmRef" style="font-family:'Space Mono',monospace; font-weight:700; font-size:17px; color:var(--ink);">Reference No. PNP-2026-000000</div>
+            <div id="confirmTimestamp" style="font-family:'Space Mono',monospace; font-size:11.5px; color:var(--muted); margin-top:4px;">Submitted: --</div>
+          </div>
+          <p style="margin-top:8px; font-size:13.5px; color:var(--text); line-height:1.5;">
+            Your submission has been received and logged under status: <strong style="color:#D97706; background:#FEF3C7; padding:2px 8px; border-radius:4px; font-size:12px;">PENDING ADMIN VERIFICATION</strong>. Save this reference number to track your submission.
+          </p>
         </div>
       </form>
       </div>
@@ -934,6 +1060,9 @@
   const photoInput = document.getElementById('inc-photo');
   const photoPreviewWrap = document.getElementById('inc-photo-preview-wrap');
   const photoPreviewImg = document.getElementById('inc-photo-preview');
+  const legalAck = document.getElementById('inc-legal-ack');
+  const captchaCheck = document.getElementById('captcha-check');
+  const btnSubmitReport = document.getElementById('btn-submit-report');
 
   if (photoInput) {
     photoInput.addEventListener('change', function(e) {
@@ -984,16 +1113,28 @@
       const photoAttached = photoInput && photoInput.files && photoInput.files.length > 0;
       const isLegalAck = legalAck && legalAck.checked;
       const isCaptcha = captchaCheck && captchaCheck.checked;
+      const incNameVal = document.getElementById('inc-name') ? document.getElementById('inc-name').value.trim() : '';
+      const incContactVal = document.getElementById('inc-contact') ? document.getElementById('inc-contact').value.trim() : '';
 
-      // Hide individual errors as user fills them in (real-time feedback)
       if (incTypeVal !== '') { showFieldError('err-inc-type', false); setFieldHighlight('inc-type', false); }
       if (incLocVal !== '') { showFieldError('err-inc-location', false); setFieldHighlight('inc-location', false); }
       if (photoAttached) { showFieldError('err-inc-photo', false); setFieldHighlight('inc-photo', false); }
       if (incDetailsVal !== '') { showFieldError('err-inc-details', false); setFieldHighlight('inc-details', false); }
       if (isLegalAck) { showFieldError('err-inc-legal-ack', false); setFieldHighlight('inc-legal-ack', false); }
       if (isCaptcha) { showFieldError('err-captcha-check', false); setFieldHighlight('captcha-check', false); }
+      if (incNameVal !== '') { showFieldError('err-inc-name', false); setFieldHighlight('inc-name', false); }
+      if (incContactVal !== '') { showFieldError('err-inc-contact', false); setFieldHighlight('inc-contact', false); }
+    } else if (activeTab === 'feedback') {
+      const fbNameVal = document.getElementById('fb-name') ? document.getElementById('fb-name').value.trim() : '';
+      const fbContactVal = document.getElementById('fb-contact') ? document.getElementById('fb-contact').value.trim() : '';
+      if (fbNameVal !== '') { showFieldError('err-fb-name', false); setFieldHighlight('fb-name', false); }
+      if (fbContactVal !== '') { showFieldError('err-fb-contact', false); setFieldHighlight('fb-contact', false); }
+    } else if (activeTab === 'commend') {
+      const cmNameVal = document.getElementById('cm-name') ? document.getElementById('cm-name').value.trim() : '';
+      const cmContactVal = document.getElementById('cm-contact') ? document.getElementById('cm-contact').value.trim() : '';
+      if (cmNameVal !== '') { showFieldError('err-cm-name', false); setFieldHighlight('cm-name', false); }
+      if (cmContactVal !== '') { showFieldError('err-cm-contact', false); setFieldHighlight('cm-contact', false); }
     }
-    // Button is always enabled — errors are shown inline on submit click
     if (btnSubmitReport) btnSubmitReport.disabled = false;
   }
 
@@ -1005,6 +1146,8 @@
     const photoAttached = photoInput && photoInput.files && photoInput.files.length > 0;
     const isLegalAck = legalAck && legalAck.checked;
     const isCaptcha = captchaCheck && captchaCheck.checked;
+    const incNameVal = document.getElementById('inc-name') ? document.getElementById('inc-name').value.trim() : '';
+    const incContactVal = document.getElementById('inc-contact') ? document.getElementById('inc-contact').value.trim() : '';
 
     let firstInvalid = null;
     if (incTypeVal === '') {
@@ -1023,6 +1166,14 @@
       showFieldError('err-inc-details', true); setFieldHighlight('inc-details', true);
       if (!firstInvalid) firstInvalid = document.getElementById('inc-details');
     }
+    if (incNameVal === '') {
+      showFieldError('err-inc-name', true); setFieldHighlight('inc-name', true);
+      if (!firstInvalid) firstInvalid = document.getElementById('inc-name');
+    }
+    if (incContactVal === '') {
+      showFieldError('err-inc-contact', true); setFieldHighlight('inc-contact', true);
+      if (!firstInvalid) firstInvalid = document.getElementById('inc-contact');
+    }
     if (!isLegalAck) {
       showFieldError('err-inc-legal-ack', true); setFieldHighlight('inc-legal-ack', true);
       if (!firstInvalid) firstInvalid = document.getElementById('inc-legal-ack');
@@ -1032,20 +1183,21 @@
       if (!firstInvalid) firstInvalid = document.getElementById('captcha-check');
     }
     if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return (incTypeVal !== '' && incLocVal !== '' && incDetailsVal !== '' && photoAttached && isLegalAck && isCaptcha);
+    return (incTypeVal !== '' && incLocVal !== '' && incDetailsVal !== '' && photoAttached && incNameVal !== '' && incContactVal !== '' && isLegalAck && isCaptcha);
   }
 
   ['change', 'input', 'keyup'].forEach(function(evtName) {
-    const incType = document.getElementById('inc-type');
-    const incLoc = document.getElementById('inc-location');
-    const incDet = document.getElementById('inc-details');
-    if (incType) incType.addEventListener(evtName, validateFormControls);
-    if (incLoc) incLoc.addEventListener(evtName, validateFormControls);
-    if (incDet) incDet.addEventListener(evtName, validateFormControls);
+    ['inc-type','inc-location','inc-details','fb-name','fb-contact','cm-name','cm-contact'].forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener(evtName, validateFormControls);
+    });
   });
   if (photoInput) photoInput.addEventListener('change', validateFormControls);
   if (legalAck) legalAck.addEventListener('change', validateFormControls);
   if (captchaCheck) captchaCheck.addEventListener('change', validateFormControls);
+
+  // Initialize button state
+  validateFormControls();
 
   // Filter blotter entries
   document.querySelectorAll('.filter-btn').forEach(function(btn) {
@@ -1097,12 +1249,15 @@
     });
   }
 
-  // Fetch Public IP Helper
+  // Fetch Public IP Helper (Max 500ms timeout so it never slows down submission)
   async function fetchPublicIP() {
     try {
-      const res = await fetch('https://api.ipify.org?format=json');
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 500);
+      const res = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
+      clearTimeout(timer);
       const data = await res.json();
-      return data.ip;
+      return data.ip || '127.0.0.1';
     } catch (e) {
       return '127.0.0.1';
     }
@@ -1112,12 +1267,63 @@
   document.getElementById('intakeForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
 
-    const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab || 'incident';
+    const submitBtn = document.getElementById('btn-submit-report');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⌛ Submitting...';
+    }
+
+    try {
+      const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab || 'incident';
 
     // Run full inline validation before proceeding
     if (activeTab === 'incident') {
       const isValid = showAllIncidentErrors();
-      if (!isValid) return;
+      if (!isValid) {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Report'; }
+        return;
+      }
+    } else if (activeTab === 'feedback') {
+      const isFbAnon = document.getElementById('fb-anon') && document.getElementById('fb-anon').checked;
+      let fbValid = true; let fbFirst = null;
+      if (!isFbAnon) {
+        const fbNameVal = (document.getElementById('fb-name') || {}).value || '';
+        const fbContactVal = (document.getElementById('fb-contact') || {}).value || '';
+        if (fbNameVal.trim() === '') {
+          showFieldError('err-fb-name', true); setFieldHighlight('fb-name', true);
+          if (!fbFirst) fbFirst = document.getElementById('fb-name');
+          fbValid = false;
+        } else { showFieldError('err-fb-name', false); setFieldHighlight('fb-name', false); }
+        if (fbContactVal.trim() === '') {
+          showFieldError('err-fb-contact', true); setFieldHighlight('fb-contact', true);
+          if (!fbFirst) fbFirst = document.getElementById('fb-contact');
+          fbValid = false;
+        } else { showFieldError('err-fb-contact', false); setFieldHighlight('fb-contact', false); }
+      }
+      if (fbFirst) fbFirst.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (!fbValid) {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Report'; }
+        return;
+      }
+    } else if (activeTab === 'commend') {
+      let cmValid = true; let cmFirst = null;
+      const cmNameVal = (document.getElementById('cm-name') || {}).value || '';
+      const cmContactVal = (document.getElementById('cm-contact') || {}).value || '';
+      if (cmNameVal.trim() === '') {
+        showFieldError('err-cm-name', true); setFieldHighlight('cm-name', true);
+        if (!cmFirst) cmFirst = document.getElementById('cm-name');
+        cmValid = false;
+      } else { showFieldError('err-cm-name', false); setFieldHighlight('cm-name', false); }
+      if (cmContactVal.trim() === '') {
+        showFieldError('err-cm-contact', true); setFieldHighlight('cm-contact', true);
+        if (!cmFirst) cmFirst = document.getElementById('cm-contact');
+        cmValid = false;
+      } else { showFieldError('err-cm-contact', false); setFieldHighlight('cm-contact', false); }
+      if (cmFirst) cmFirst.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (!cmValid) {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Report'; }
+        return;
+      }
     }
 
     const ref = 'PNP-2026-' + String(Math.floor(100000 + Math.random()*899999));
@@ -1134,13 +1340,14 @@
     let imageUrl = null;
 
     if (activeTab === 'incident') {
-      const photoFile = photoInput.files[0];
+      const photoFile = photoInput ? photoInput.files[0] : null;
       try {
-        if (window.DapitanAPI && window.DapitanAPI.uploadReportImage) {
+        if (photoFile && window.DapitanAPI && window.DapitanAPI.uploadReportImage) {
           imageUrl = await window.DapitanAPI.uploadReportImage(photoFile);
         }
       } catch (uploadErr) {
         alert(uploadErr.message);
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Report'; }
         return;
       }
 
@@ -1165,6 +1372,7 @@
           dupModal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
           pendingSubmissionData = { ref, type, dateStr, location, details, contact, lat, lng, imageUrl, isoTimestamp };
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Report'; }
           return;
         }
       }
@@ -1195,7 +1403,16 @@
       }
     }
 
-    await finalizeSubmission({ ref, type, dateStr, location, details, contact, lat, lng, imageUrl, isoTimestamp });
+      await finalizeSubmission({ ref, type, dateStr, location, details, contact, lat, lng, imageUrl, isoTimestamp });
+    } catch (err) {
+      console.error("Submission error:", err);
+      alert("Submission error: " + (err.message || err));
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Report';
+      }
+    }
   });
 
   async function finalizeSubmission(dataObj) {
@@ -1226,10 +1443,19 @@
     pendingSubmissionData = null;
 
     document.getElementById('confirmRef').textContent = 'Reference No. ' + dataObj.ref;
-    document.getElementById('confirmTimestamp').textContent = `Logged: ${dataObj.dateStr} | Coordinates: ${Number(dataObj.lat).toFixed(4)}, ${Number(dataObj.lng).toFixed(4)}`;
+    document.getElementById('confirmTimestamp').textContent = `Logged: ${dataObj.dateStr} | Location: ${dataObj.location}`;
+    
+    // Reset form inputs
+    const intakeForm = document.getElementById('intakeForm');
+    if (intakeForm) intakeForm.reset();
+    if (photoPreviewWrap) photoPreviewWrap.style.display = "none";
+
     const box = document.getElementById('confirmBox');
+    box.style.display = 'block';
     box.classList.add('show');
-    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    alert(`✅ Submission Successful!\n\nYour reference number is: ${dataObj.ref}\nStatus: PENDING ADMIN VERIFICATION`);
   }
 
   // Duplicate Check Modal Listeners
