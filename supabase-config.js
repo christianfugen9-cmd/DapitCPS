@@ -35,8 +35,98 @@ function saveStoredReports(reports) {
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reports));
 }
 
+// Helper: Haversine distance formula in meters between two lat/lng points
+function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
+  if (!lat1 || !lon1 || !lat2 || !lon2) return Infinity;
+  const R = 6371000; // Radius of Earth in meters
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 // Global API helper methods
 window.DapitanAPI = {
+  // Upload photo attachment to Supabase Storage (or convert to Base64 fallback)
+  async uploadReportImage(file) {
+    if (!file) return null;
+
+    // Validate type and size (5MB max)
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type.toLowerCase())) {
+      throw new Error("Invalid image format. Allowed formats: JPG, JPEG, PNG, WEBP.");
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error("Image file size exceeds the 5MB maximum limit.");
+    }
+
+    if (supabaseClient) {
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `incident_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+        const filePath = `reports/${fileName}`;
+
+        const { data, error } = await supabaseClient.storage
+          .from('report-photos')
+          .upload(filePath, file, { cacheControl: '3600', upsert: false });
+
+        if (!error && data) {
+          const { data: publicUrlData } = supabaseClient.storage
+            .from('report-photos')
+            .getPublicUrl(filePath);
+          if (publicUrlData && publicUrlData.publicUrl) {
+            return publicUrlData.publicUrl;
+          }
+        } else if (error) {
+          console.warn("Supabase Storage upload warning (using fallback):", error.message);
+        }
+      } catch (err) {
+        console.warn("Storage upload exception:", err);
+      }
+    }
+
+    // Fallback: Convert to Base64 Data URL for local & DB storage
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (e) => reject(new Error("Failed to read image file."));
+      reader.readAsDataURL(file);
+    });
+  },
+
+  // Check for duplicate reports based on Incident Type, Radius (~500m), and Time (within 30 mins)
+  async checkDuplicateReport(type, lat, lng, timeWindowMinutes = 30, radiusMeters = 500) {
+    if (!lat || !lng) return null;
+    try {
+      const allReports = await this.fetchReports();
+      const now = new Date().getTime();
+      const windowMs = timeWindowMinutes * 60 * 1000;
+
+      for (const r of allReports) {
+        // Filter by same or matching incident type
+        if (r.type && type && (r.type.toLowerCase().includes(type.toLowerCase()) || type.toLowerCase().includes(r.type.toLowerCase()))) {
+          // Check timestamp
+          let rTime = new Date(r.created_at || r.timestamp || r.date).getTime();
+          if (isNaN(rTime)) rTime = now; // Fallback
+
+          if (Math.abs(now - rTime) <= windowMs) {
+            const distance = calculateDistanceMeters(Number(lat), Number(lng), Number(r.lat), Number(r.lng));
+            if (distance <= radiusMeters) {
+              return { ...r, distanceMeters: Math.round(distance) };
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Duplicate check error:", err);
+    }
+    return null;
+  },
+
   // Fetch all reports directly from real Supabase table
   async fetchReports() {
     if (supabaseClient) {
@@ -59,6 +149,14 @@ window.DapitanAPI = {
 
   // Submit a new report or feedback
   async submitReport(newReport) {
+    // Enforce default status as 'Pending' if not set
+    if (!newReport.status) {
+      newReport.status = 'Pending';
+    }
+    if (!newReport.created_at) {
+      newReport.created_at = new Date().toISOString();
+    }
+
     // Always save to LocalStorage fallback first for instant local persistence
     const reports = getStoredReports();
     reports.unshift(newReport);
@@ -80,7 +178,7 @@ window.DapitanAPI = {
     return newReport;
   },
 
-  // Update report status
+  // Update report status (Pending, Verified, False Report, Resolved)
   async updateReportStatus(ref, newStatus) {
     // Update LocalStorage
     const reports = getStoredReports();
@@ -122,7 +220,7 @@ window.DapitanAPI = {
           .eq('ref', ref);
         if (error) {
           console.error("Error deleting from Supabase:", error.message);
-          alert("Supabase delete error: " + error.message + "\n\nMake sure the DELETE policy is added in Supabase SQL Editor:\nCREATE POLICY \"Public can delete\" ON reports FOR DELETE TO anon USING (true);");
+          alert("Supabase delete error: " + error.message);
         } else {
           console.log("Successfully deleted report from Supabase:", ref);
         }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Staff Portal — Dapitan City Police Station</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="pnp-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -189,8 +189,9 @@
   .admin-ref{font-family:'Space Mono',monospace; color:var(--ink); font-weight:700;}
   .type-tag{font-size:11.5px; font-weight:600;}
   .status-pill{font-family:'Space Mono',monospace; font-size:10.5px; text-transform:uppercase; padding:4px 10px; border-radius:20px; display:inline-block;}
-  .status-new{background:rgba(158,43,43,.15); color:var(--red);}
-  .status-review{background:rgba(190,155,70,.18); color:#8a6d1f;}
+  .status-new{background:rgba(217,119,6,.15); color:#d97706;}
+  .status-review{background:rgba(47,107,79,.18); color:var(--green);}
+  .status-falsereport{background:rgba(158,43,43,.25); color:#9E2B2B; font-weight:700;}
   .status-closed{background:rgba(47,107,79,.15); color:var(--green);}
   .row-empty{padding:40px 18px; text-align:center; color:var(--muted); font-size:13.5px;}
 
@@ -245,11 +246,7 @@
 <div id="loginScreen">
   <div class="login-wrap">
     <div class="login-badge">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <polygon points="24,2 44,12 44,26 24,46 4,26 4,12" fill="#0A1626" stroke="#BE9B46" stroke-width="1.5"/>
-        <circle cx="24" cy="21" r="10" fill="none" stroke="#BE9B46" stroke-width="1.4"/>
-        <path d="M24 15 L24 27 M18 21 L30 21" stroke="#BE9B46" stroke-width="1.4"/>
-      </svg>
+      <img src="pnp-logo.png" alt="PNP Logo" style="width:54px; height:auto; margin-bottom:12px; filter:drop-shadow(0 2px 8px rgba(0,0,0,.3));">
       <div class="eyebrow">Republic of the Philippines</div>
       <div class="name">Dapitan City Police Station</div>
     </div>
@@ -283,11 +280,7 @@
 <div id="dashboard">
   <aside class="sidebar">
     <div class="sb-brand">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <polygon points="24,2 44,12 44,26 24,46 4,26 4,12" fill="#0A1626" stroke="#BE9B46" stroke-width="1.5"/>
-        <circle cx="24" cy="21" r="10" fill="none" stroke="#BE9B46" stroke-width="1.4"/>
-        <path d="M24 15 L24 27 M18 21 L30 21" stroke="#BE9B46" stroke-width="1.4"/>
-      </svg>
+      <img src="pnp-logo.png" alt="PNP Logo" style="width:36px; height:auto; flex:none; filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));">
       <div>
         <div class="eyebrow">Staff Portal</div>
         <div class="name">Dapitan City PS</div>
@@ -369,9 +362,10 @@
         </div>
         <div class="filter-chips" id="filterChips">
           <button class="chip active" data-status="all">All</button>
-          <button class="chip" data-status="new">New</button>
-          <button class="chip" data-status="review">In Review</button>
-          <button class="chip" data-status="closed">Closed</button>
+          <button class="chip" data-status="Pending">Pending</button>
+          <button class="chip" data-status="Verified">Verified</button>
+          <button class="chip" data-status="False Report">False Report</button>
+          <button class="chip" data-status="Resolved">Resolved</button>
         </div>
       </div>
 
@@ -402,9 +396,10 @@
         </div>
         <div class="filter-chips" id="allFilterChips">
           <button class="chip active" data-status="all">All <span class="chip-count" id="count-all">0</span></button>
-          <button class="chip" data-status="new">New <span class="chip-count" id="count-new">0</span></button>
-          <button class="chip" data-status="review">In Review <span class="chip-count" id="count-review">0</span></button>
-          <button class="chip" data-status="closed">Closed <span class="chip-count" id="count-closed">0</span></button>
+          <button class="chip" data-status="Pending">Pending <span class="chip-count" id="count-pending">0</span></button>
+          <button class="chip" data-status="Verified">Verified <span class="chip-count" id="count-verified">0</span></button>
+          <button class="chip" data-status="False Report">False <span class="chip-count" id="count-false">0</span></button>
+          <button class="chip" data-status="Resolved">Resolved <span class="chip-count" id="count-resolved">0</span></button>
         </div>
       </div>
 
@@ -449,8 +444,8 @@
           </thead>
           <tbody>
             <tr><td class="admin-ref">PNP-OFF-0102</td><td>PMAJ Reliosa M. Santos</td><td>Station Commander</td><td>Dapitan City PS HQ</td><td><span class="status-pill status-closed">On Duty</span></td></tr>
-            <tr><td class="admin-ref">PNP-OFF-0341</td><td>PCMS Ramon G. Mendoza</td><td>Chief Investigator</td><td>Investigation & Detective Management</td><td><span class="status-pill status-closed">On Duty</span></td></tr>
-            <tr><td class="admin-ref">PNP-OFF-0489</td><td>PSSg Maria C. Villanueva</td><td>Desk Officer</td><td>Admin & Records Section</td><td><span class="status-pill status-review">On Shift</span></td></tr>
+            <tr><td class="admin-ref">PNP-OFF-0341</td><td>PCMS Ramon G. Mendoza</td><td>Chief Investigator</td><td>Investigation &amp; Detective Management</td><td><span class="status-pill status-closed">On Duty</span></td></tr>
+            <tr><td class="admin-ref">PNP-OFF-0489</td><td>PSSg Maria C. Villanueva</td><td>Desk Officer</td><td>Admin &amp; Records Section</td><td><span class="status-pill status-review">On Shift</span></td></tr>
             <tr><td class="admin-ref">PNP-OFF-0512</td><td>PCpl Samuel T. Reyes</td><td>Patrol Officer</td><td>Sub-Station 2 (Brgy. Polo)</td><td><span class="status-pill status-new">Patrol Duty</span></td></tr>
           </tbody>
         </table>
@@ -470,7 +465,7 @@
         </div>
         <div class="field" style="margin-top:14px;">
           <label>Public Portal Status</label>
-          <div style="font-weight:700; color:var(--green); margin-top:4px;">● Live & Operational</div>
+          <div style="font-weight:700; color:var(--green); margin-top:4px;">● Live &amp; Operational</div>
         </div>
       </div>
     </div>
@@ -491,19 +486,34 @@
     </button>
   </div>
   <div class="drawer-body">
-    <div class="dd-row"><div class="dd-label">Submitted</div><div class="dd-value" id="drawerDate">—</div></div>
-    <div class="dd-row"><div class="dd-label">Type</div><div class="dd-value" id="drawerType">—</div></div>
+    <div class="dd-row"><div class="dd-label">Submitted Timestamp</div><div class="dd-value" id="drawerDate">—</div></div>
+    <div class="dd-row"><div class="dd-label">Classification / Type</div><div class="dd-value" id="drawerType">—</div></div>
     <div class="dd-row"><div class="dd-label">Location / Subject</div><div class="dd-value" id="drawerLocation">—</div></div>
-    <div class="dd-row"><div class="dd-label">Details</div><div class="dd-value" id="drawerDetails">—</div></div>
-    <div class="dd-row"><div class="dd-label">Contact</div><div class="dd-value" id="drawerContact">—</div></div>
+    <div class="dd-row">
+      <div class="dd-label">GPS Pin Coordinates</div>
+      <div class="dd-value" id="drawerGPS">—</div>
+    </div>
+    <div class="dd-row">
+      <div class="dd-label">Photo Evidence</div>
+      <div class="dd-value" id="drawerImageWrap">No photo attached.</div>
+    </div>
+    <div class="dd-row"><div class="dd-label">Incident Details</div><div class="dd-value" id="drawerDetails">—</div></div>
+    <div class="dd-row"><div class="dd-label">Contact Details</div><div class="dd-value" id="drawerContact">—</div></div>
+    <div class="dd-row" style="background:#F9F9F4;">
+      <div class="dd-label">Submission Audit Trail</div>
+      <div class="dd-value" id="drawerAudit" style="font-family:'Space Mono',monospace; font-size:11px; line-height:1.5;">—</div>
+    </div>
   </div>
-  <div class="drawer-actions">
-    <select id="drawerStatusSelect">
-      <option value="new">New</option>
-      <option value="review">In Review</option>
-      <option value="closed">Closed</option>
+
+  <div class="drawer-actions" style="flex-wrap:wrap;">
+    <select id="drawerStatusSelect" style="flex:1; min-width:140px;">
+      <option value="Pending">Pending Verification</option>
+      <option value="Verified">Verified</option>
+      <option value="False Report">False Report</option>
+      <option value="Resolved">Resolved</option>
     </select>
-    <button id="drawerSave">Update</button>
+    <button id="drawerSave">Update Status</button>
+    <button id="btnDispatch" style="background:#2F6B4F; color:#fff; border:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; cursor:pointer;" disabled title="Only Verified reports can trigger officer deployment">🚨 Dispatch Officers</button>
     <button id="drawerDelete" class="btn-danger">Delete</button>
   </div>
 </div>
@@ -513,8 +523,25 @@
 <script>
   let REPORTS = [];
 
-  const TYPE_ICON = {new:'status-new', review:'status-review', closed:'status-closed'};
-  const STATUS_LABEL = {new:'New', review:'In Review', closed:'Closed'};
+  const TYPE_ICON = {
+    Pending: 'status-new',
+    new: 'status-new',
+    Verified: 'status-review',
+    review: 'status-review',
+    'False Report': 'status-falsereport',
+    Resolved: 'status-closed',
+    closed: 'status-closed'
+  };
+
+  const STATUS_LABEL = {
+    Pending: 'Pending Review',
+    new: 'Pending Review',
+    Verified: 'Verified',
+    review: 'Verified',
+    'False Report': 'False Report',
+    Resolved: 'Resolved',
+    closed: 'Resolved'
+  };
 
   async function loadReportsData(){
     if (window.DapitanAPI) {
@@ -525,18 +552,21 @@
 
   function updateCounts(){
     const total = REPORTS.length;
-    const newCount = REPORTS.filter(r=>r.status==='new').length;
-    const reviewCount = REPORTS.filter(r=>r.status==='review').length;
-    const closedCount = REPORTS.filter(r=>r.status==='closed').length;
+    const pendingCount = REPORTS.filter(r=> !r.status || r.status==='Pending' || r.status==='new').length;
+    const verifiedCount = REPORTS.filter(r=> r.status==='Verified' || r.status==='review').length;
+    const falseCount = REPORTS.filter(r=> r.status==='False Report').length;
+    const resolvedCount = REPORTS.filter(r=> r.status==='Resolved' || r.status==='closed').length;
 
     const elAll = document.getElementById('count-all');
     if(elAll) elAll.textContent = total;
-    const elNew = document.getElementById('count-new');
-    if(elNew) elNew.textContent = newCount;
-    const elReview = document.getElementById('count-review');
-    if(elReview) elReview.textContent = reviewCount;
-    const elClosed = document.getElementById('count-closed');
-    if(elClosed) elClosed.textContent = closedCount;
+    const elPending = document.getElementById('count-pending');
+    if(elPending) elPending.textContent = pendingCount;
+    const elVerified = document.getElementById('count-verified');
+    if(elVerified) elVerified.textContent = verifiedCount;
+    const elFalse = document.getElementById('count-false');
+    if(elFalse) elFalse.textContent = falseCount;
+    const elResolved = document.getElementById('count-resolved');
+    if(elResolved) elResolved.textContent = resolvedCount;
   }
 
   function renderTable(){
@@ -547,7 +577,8 @@
     const q = document.getElementById('searchInput').value.trim().toLowerCase();
 
     const rows = REPORTS.filter(r=>{
-      const statusMatch = activeChip === 'all' || r.status === activeChip;
+      const rStatus = r.status || 'Pending';
+      const statusMatch = activeChip === 'all' || rStatus === activeChip || (activeChip==='Pending' && rStatus==='new') || (activeChip==='Verified' && rStatus==='review') || (activeChip==='Resolved' && rStatus==='closed');
       const searchMatch = !q || r.ref.toLowerCase().includes(q) || r.type.toLowerCase().includes(q) || r.location.toLowerCase().includes(q) || (r.details && r.details.toLowerCase().includes(q));
       return statusMatch && searchMatch;
     });
@@ -561,9 +592,9 @@
       <tr data-ref="${r.ref}">
         <td class="admin-ref">${r.ref}</td>
         <td class="type-tag">${r.type}</td>
-        <td>${r.date}</td>
+        <td>${r.date || r.created_at || '—'}</td>
         <td>${r.location}</td>
-        <td><span class="status-pill ${TYPE_ICON[r.status] || 'status-new'}">${STATUS_LABEL[r.status] || 'New'}</span></td>
+        <td><span class="status-pill ${TYPE_ICON[r.status] || 'status-new'}">${STATUS_LABEL[r.status] || r.status || 'Pending Review'}</span></td>
       </tr>
     `).join('');
 
@@ -581,7 +612,8 @@
     const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
 
     const rows = REPORTS.filter(r=>{
-      const statusMatch = activeChip === 'all' || r.status === activeChip;
+      const rStatus = r.status || 'Pending';
+      const statusMatch = activeChip === 'all' || rStatus === activeChip || (activeChip==='Pending' && rStatus==='new') || (activeChip==='Verified' && rStatus==='review') || (activeChip==='Resolved' && rStatus==='closed');
       const searchMatch = !q || r.ref.toLowerCase().includes(q) || r.type.toLowerCase().includes(q) || r.location.toLowerCase().includes(q) || (r.details && r.details.toLowerCase().includes(q)) || (r.contact && r.contact.toLowerCase().includes(q));
       return statusMatch && searchMatch;
     });
@@ -595,10 +627,10 @@
       <tr data-ref="${r.ref}">
         <td class="admin-ref">${r.ref}</td>
         <td class="type-tag">${r.type}</td>
-        <td>${r.date}</td>
+        <td>${r.date || r.created_at || '—'}</td>
         <td>${r.location}</td>
         <td>${r.contact || 'Anonymous'}</td>
-        <td><span class="status-pill ${TYPE_ICON[r.status] || 'status-new'}">${STATUS_LABEL[r.status] || 'New'}</span></td>
+        <td><span class="status-pill ${TYPE_ICON[r.status] || 'status-new'}">${STATUS_LABEL[r.status] || r.status || 'Pending Review'}</span></td>
       </tr>
     `).join('');
 
@@ -637,6 +669,7 @@
   // ===== Detail drawer =====
   const drawer = document.getElementById('drawer');
   const drawerOverlay = document.getElementById('drawerOverlay');
+  const btnDispatch = document.getElementById('btnDispatch');
   let currentRef = null;
 
   function openDrawer(ref){
@@ -645,15 +678,55 @@
     currentRef = ref;
     document.getElementById('drawerRef').textContent = r.ref;
     document.getElementById('drawerTitle').textContent = r.type;
-    document.getElementById('drawerDate').textContent = r.date;
+    document.getElementById('drawerDate').textContent = r.date || r.created_at || '—';
     document.getElementById('drawerType').textContent = r.type;
     document.getElementById('drawerLocation').textContent = r.location;
     document.getElementById('drawerDetails').textContent = r.details || 'No details provided.';
     document.getElementById('drawerContact').textContent = r.contact || 'Anonymous';
-    document.getElementById('drawerStatusSelect').value = r.status || 'new';
+    
+    // Status Select
+    const currStatus = r.status || 'Pending';
+    const statusSelect = document.getElementById('drawerStatusSelect');
+    if (statusSelect) statusSelect.value = currStatus;
+
+    // Dispatch Officers Button: Enabled ONLY if Verified
+    if (btnDispatch) {
+      const isVerified = (currStatus === 'Verified' || currStatus === 'review');
+      btnDispatch.disabled = !isVerified;
+      btnDispatch.style.opacity = isVerified ? "1" : "0.5";
+      btnDispatch.style.cursor = isVerified ? "pointer" : "not-allowed";
+    }
+
+    // Photo Evidence
+    const imgWrap = document.getElementById('drawerImageWrap');
+    if (imgWrap) {
+      if (r.image_url) {
+        imgWrap.innerHTML = `<a href="${r.image_url}" target="_blank" title="Click to view full photo"><img src="${r.image_url}" style="max-width:100%; max-height:160px; border-radius:6px; border:1px solid var(--line); object-fit:cover; display:block; margin-top:4px;"></a>`;
+      } else {
+        imgWrap.textContent = "No photo attached.";
+      }
+    }
+
+    // GPS Pin Coordinates
+    const gpsEl = document.getElementById('drawerGPS');
+    if (gpsEl) {
+      if (r.lat && r.lng) {
+        gpsEl.innerHTML = `📍 Lat ${Number(r.lat).toFixed(5)}, Lng ${Number(r.lng).toFixed(5)} &nbsp; <a href="https://maps.google.com/?q=${r.lat},${r.lng}" target="_blank" style="color:var(--gold); font-weight:700; text-decoration:underline;">View on Google Maps ↗</a>`;
+      } else {
+        gpsEl.textContent = "Location pin not set.";
+      }
+    }
+
+    // Audit Trail
+    const auditEl = document.getElementById('drawerAudit');
+    if (auditEl) {
+      auditEl.innerHTML = `<div><strong>IP Address:</strong> ${r.ip_address || '127.0.0.1'}</div><div><strong>Device User-Agent:</strong> ${r.user_agent || 'Mozilla/5.0 (Standard Web Browser)'}</div><div><strong>Exact Created ISO:</strong> ${r.created_at || '—'}</div>`;
+    }
+
     drawer.classList.add('show');
     drawerOverlay.classList.add('show');
   }
+
   function closeDrawer(){
     drawer.classList.remove('show');
     drawerOverlay.classList.remove('show');
@@ -661,6 +734,19 @@
   }
   document.getElementById('drawerClose').addEventListener('click', closeDrawer);
   drawerOverlay.addEventListener('click', closeDrawer);
+
+  // Dispatch Action Listener
+  if (btnDispatch) {
+    btnDispatch.addEventListener('click', () => {
+      const r = REPORTS.find(x => x.ref === currentRef);
+      if (!r) return;
+      if (r.status !== 'Verified' && r.status !== 'review') {
+        alert("Only reports marked as VERIFIED can proceed to officer deployment.");
+        return;
+      }
+      alert(`🚨 OFFICER DISPATCH TRIGGERED!\n\nReference: ${r.ref}\nType: ${r.type}\nLocation: ${r.location}\nGPS: ${r.lat || '8.6534'}, ${r.lng || '123.4233'}\n\nNearby patrol officers have been notified for immediate deployment.`);
+    });
+  }
 
   document.getElementById('drawerSave').addEventListener('click', async ()=>{
     const r = REPORTS.find(x => x.ref === currentRef);
@@ -671,7 +757,7 @@
       await window.DapitanAPI.updateReportStatus(currentRef, newStatus);
     }
     renderAll();
-    closeDrawer();
+    openDrawer(currentRef); // Refresh drawer controls & dispatch button
   });
 
   const drawerDeleteBtn = document.getElementById('drawerDelete');

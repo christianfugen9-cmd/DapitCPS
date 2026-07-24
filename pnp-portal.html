@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PNP Public Portal — Updates &amp; Reports</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="pnp-logo.png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -57,23 +59,45 @@
 
   /* ===== Emergency strip ===== */
   .hotline-strip{
-    background:var(--red);
-    color:#fff;
-    font-size:13px;
+    background: linear-gradient(90deg, #0A1626 0%, #12233D 50%, #1B3255 100%);
+    border-bottom: 1px solid rgba(190, 155, 70, 0.25);
+    color: #EDEDE6;
+    font-size: 12.5px;
   }
   .hotline-strip .container{
     display:flex; align-items:center; justify-content:space-between;
-    padding-top:8px; padding-bottom:8px;
-    flex-wrap:wrap; gap:8px;
+    padding-top:7px; padding-bottom:7px;
+    flex-wrap:wrap; gap:10px;
   }
-  .hotline-strip .items{display:flex; gap:22px; flex-wrap:wrap;}
-  .hotline-strip strong{font-family:'Space Mono',monospace; letter-spacing:.03em;}
+  .hotline-strip .items{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  .hotline-pill{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:20px; padding:4px 14px;
+    font-size:12px; transition:all .15s ease;
+  }
+  .hotline-pill.emergency{
+    background:rgba(158,43,43,0.35);
+    border-color:rgba(224,82,82,0.4);
+    color:#FFD6D6;
+  }
+  .hotline-pill.emergency strong{color:#FFF; font-weight:800;}
+  .hotline-pill strong{font-family:'Space Mono',monospace; color:var(--gold-soft); letter-spacing:.02em;}
+  .hotline-status{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:'Space Mono',monospace; font-size:11.5px; color:#A0AEC0;
+  }
+  .status-dot{
+    width:7px; height:7px; border-radius:50%; background:#2F6B4F;
+    box-shadow:0 0 8px #2F6B4F; display:inline-block;
+  }
 
   /* ===== Header ===== */
   header.site{
     background:var(--ink);
     color:#EDEEF2;
-    position:sticky; top:0; z-index:50;
+    position:sticky; top:0; z-index:9999;
     border-bottom:3px solid var(--gold);
   }
   .nav-row{
@@ -384,22 +408,27 @@
 <div class="hotline-strip">
   <div class="container">
     <div class="items">
-      <span>In an emergency, call <strong>911</strong></span>
-      <span>PNP Hotline <strong>117</strong></span>
-      <span>Text Hotline <strong>0917-847-5757</strong></span>
+      <span class="hotline-pill emergency">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v4M12 17h.01M10.3 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.7 3.86a2 2 0 0 0-3.4 0Z"/></svg>
+        In an emergency, call <strong>911</strong>
+      </span>
+      <span class="hotline-pill">
+        📞 PNP Hotline <strong>117</strong>
+      </span>
+      <span class="hotline-pill">
+        📱 Text Hotline <strong>0917-847-5757</strong>
+      </span>
     </div>
-    <span>Regional stations open 24/7</span>
+    <span class="hotline-status">
+      <span class="status-dot"></span> Regional stations open 24/7
+    </span>
   </div>
 </div>
 
 <header class="site">
   <div class="container nav-row">
     <div class="brand">
-      <svg class="badge" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <polygon points="24,2 44,12 44,26 24,46 4,26 4,12" fill="#0A1626" stroke="#BE9B46" stroke-width="1.5"/>
-        <circle cx="24" cy="21" r="10" fill="none" stroke="#BE9B46" stroke-width="1.4"/>
-        <path d="M24 15 L24 27 M18 21 L30 21" stroke="#BE9B46" stroke-width="1.4"/>
-      </svg>
+      <img src="pnp-logo.png" alt="PNP Logo" class="badge" style="width:42px; height:auto; object-fit:contain;">
       <div class="brand-text">
         <div class="eyebrow">Republic of the Philippines</div>
         <div class="name">Dapitan City Police Station</div>
@@ -435,16 +464,6 @@
         <a href="#updates" class="btn btn-primary">View today's updates</a>
         <a href="#report" class="btn btn-outline" data-tab-link="feedback">Send feedback</a>
       </div>
-    </div>
-    <div class="hero-card">
-      <div class="cap">Advisories snapshot — today</div>
-      <div class="num">14</div>
-      <div class="desc">active bulletins logged across all divisions</div>
-      <ul class="hero-mini-list">
-        <li><span>Community advisories</span><span>08</span></li>
-        <li><span>Traffic notices</span><span>04</span></li>
-        <li><span>Public safety alerts</span><span>02</span></li>
-      </ul>
     </div>
   </div>
 </section>
@@ -558,7 +577,7 @@
         <div class="status">Closed</div>
       </div>
 
-      <div class="blotter-foot"><span style="color:#8A93A3; font-size:12px;">🔒 Official Police Blotter records are restricted for authorized personnel. Duty officers can access the full Blotter Log via <a href="admin.html" style="color:var(--gold); text-decoration:underline;">Staff Login</a>.</span></div>
+      <div class="blotter-foot"><span style="color:#8A93A3; font-size:12px;">🔒 Official Police Blotter records are restricted for authorized personnel. Duty officers can access the full Blotter Log via <a href="admin.html" style="color:var(--gold); text-decoration:underline;">Admin Login</a>.</span></div>
     </div>
   </div>
 </section>
@@ -595,36 +614,77 @@
         <div class="tab-panel active" data-panel="incident">
           <div class="field">
             <label for="inc-type">Type of incident</label>
-            <select id="inc-type">
+            <select id="inc-type" required>
               <option value="" selected disabled hidden>Select incident type</option>
-              <option>Theft or robbery</option>
-              <option>Public disturbance</option>
-              <option>Traffic violation</option>
-              <option>Suspicious activity</option>
-              <option>Other</option>
+              <option value="Theft or robbery">Theft or robbery</option>
+              <option value="Public disturbance">Public disturbance</option>
+              <option value="Traffic violation">Traffic violation</option>
+              <option value="Suspicious activity">Suspicious activity</option>
+              <option value="Other">Other</option>
             </select>
+            <span class="field-error" id="err-inc-type" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please select an incident type.</span>
           </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="inc-location">Location</label>
-              <input id="inc-location" type="text" placeholder="Barangay, street, or landmark">
+          <div class="field" style="margin-top:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+              <label for="inc-location" style="margin:0;">Incident Location &amp; GPS Pin</label>
+              <button type="button" id="btn-detect-gps" style="font-family:'Space Mono',monospace; font-size:10.5px; background:var(--gold); color:var(--ink-deep); border:none; padding:4px 10px; border-radius:4px; font-weight:700; cursor:pointer;">📍 Auto-Detect GPS</button>
             </div>
-            <div class="field">
-              <label for="inc-date">Date &amp; time it happened</label>
-              <input id="inc-date" type="datetime-local">
-            </div>
+            <input id="inc-location" type="text" placeholder="Barangay, street, or landmark" required>
+            <span class="field-error" id="err-inc-location" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please specify the incident location.</span>
+            <div id="inc-map-container" style="height:200px; border-radius:6px; margin-top:8px; border:1.5px solid var(--line); overflow:hidden; position:relative; z-index:1; isolation:isolate;"></div>
+            <input type="hidden" id="inc-lat">
+            <input type="hidden" id="inc-lng">
+            <span id="gps-status-text" style="font-size:11px; color:var(--muted); margin-top:4px; display:block;">Tap the map to place an exact incident pin or use Auto-Detect GPS.</span>
           </div>
-          <div class="field">
+
+          <!-- Photo Upload Field -->
+          <div class="field" style="margin-top:14px;">
+            <label for="inc-photo">Incident Photo Attachment (Upload photo evidence)</label>
+            <input type="file" id="inc-photo" accept="image/jpeg, image/jpg, image/png, image/webp" style="padding:8px; border:1px dashed var(--line); width:100%; border-radius:6px; background:#fff;" required>
+            <span class="field-error" id="err-inc-photo" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please upload at least one photo of the incident as evidence.</span>
+            <div id="inc-photo-preview-wrap" style="display:none; margin-top:8px;">
+              <img id="inc-photo-preview" src="" alt="Incident Preview" style="max-height:140px; border-radius:6px; border:1px solid var(--line); object-fit:cover;">
+            </div>
+            <span style="font-size:11px; color:var(--muted); margin-top:4px; display:block;">Allowed formats: JPG, JPEG, PNG, WEBP (Max 5MB).</span>
+          </div>
+
+          <div class="field" style="margin-top:14px;">
             <label for="inc-details">What happened</label>
-            <textarea id="inc-details" rows="4" placeholder="Describe what you saw or experienced, as clearly as you can."></textarea>
-          </div>
-          <div class="anon-toggle">
-            <input type="checkbox" id="inc-anon">
-            <label for="inc-anon" style="margin:0; font-weight:400;">Submit this report anonymously</label>
+            <textarea id="inc-details" rows="4" placeholder="Describe what you saw or experienced, as clearly as you can." required></textarea>
+            <span class="field-error" id="err-inc-details" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please describe what happened.</span>
           </div>
           <div class="field-row" id="inc-contact-row">
-            <div class="field"><label for="inc-name">Full name</label><input id="inc-name" type="text"></div>
-            <div class="field"><label for="inc-contact">Phone or email</label><input id="inc-contact" type="text"></div>
+            <div class="field"><label for="inc-name">Full name (optional)</label><input id="inc-name" type="text"></div>
+            <div class="field"><label for="inc-contact">Phone or email (optional)</label><input id="inc-contact" type="text"></div>
+          </div>
+
+          <!-- Mandatory False Reporting Warning & Acknowledgment -->
+          <div style="background:#FFF8E7; border:1.5px solid #E4D6AE; border-radius:8px; padding:14px 16px; margin:18px 0;">
+            <div style="font-family:'Space Mono',monospace; font-size:10.5px; font-weight:700; color:#9E2B2B; text-transform:uppercase; margin-bottom:6px; display:flex; align-items:center; gap:5px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v4M12 17h.01M10.3 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.7 3.86a2 2 0 0 0-3.4 0Z"/></svg>
+              Legal Warning Notice
+            </div>
+            <p style="font-size:12.5px; color:#2C2C2C; margin:0 0 10px; line-height:1.55;">
+              <strong>Warning:</strong> Knowingly submitting false or misleading reports is prohibited and may result in legal action under applicable Philippine laws. Please ensure that the information you provide is accurate and truthful.
+            </p>
+            <div style="display:flex; align-items:flex-start; gap:8px;">
+              <input type="checkbox" id="inc-legal-ack" style="margin-top:3px; cursor:pointer;" required>
+              <label for="inc-legal-ack" style="font-size:12px; font-weight:700; color:var(--ink); margin:0; cursor:pointer; line-height:1.4;">
+                I understand and acknowledge that submitting false or misleading reports is illegal under Philippine law.
+              </label>
+            </div>
+            <span class="field-error" id="err-inc-legal-ack" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ You must acknowledge the legal warning notice before submitting.</span>
+          </div>
+
+          <!-- Bot & Spam Challenge Widget -->
+          <div style="padding:12px 14px; background:#f5f5f0; border:1px solid var(--line); border-radius:8px; margin-bottom:18px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <input type="checkbox" id="captcha-check" style="width:18px; height:18px; cursor:pointer;" required>
+              <label for="captcha-check" style="font-size:12.5px; font-weight:600; color:var(--text); cursor:pointer; margin:0;">
+                🛡️ I am human (Spam &amp; Bot Protection Challenge)
+              </label>
+            </div>
+            <span class="field-error" id="err-captcha-check" style="display:none; color:var(--red); font-size:11.5px; font-weight:600; margin-top:4px;">⚠️ Please check the human verification box.</span>
           </div>
         </div>
 
@@ -646,7 +706,11 @@
             <label for="fb-details">Your feedback</label>
             <textarea id="fb-details" rows="4" placeholder="Tell us what went well or what we can do better."></textarea>
           </div>
-          <div class="field-row">
+          <div class="anon-toggle">
+            <input type="checkbox" id="fb-anon">
+            <label for="fb-anon" style="margin:0; font-weight:400;">Submit this feedback anonymously</label>
+          </div>
+          <div class="field-row" id="fb-contact-row">
             <div class="field"><label for="fb-name">Full name (optional)</label><input id="fb-name" type="text"></div>
             <div class="field"><label for="fb-contact">Phone or email (optional)</label><input id="fb-contact" type="text"></div>
           </div>
@@ -671,14 +735,25 @@
           </div>
         </div>
 
+        <!-- Duplicate Report Notice Overlay Modal -->
+        <div id="dup-notice-modal" style="display:none; background:#FFF0F0; border:1.5px solid var(--red); padding:16px; border-radius:8px; margin-bottom:16px;">
+          <div style="font-weight:700; color:var(--red); font-size:13.5px; margin-bottom:4px;">⚠️ Similar Recent Incident Detected Nearby</div>
+          <p id="dup-notice-text" style="font-size:12.5px; color:#333; margin:0 0 10px; line-height:1.4;"></p>
+          <div style="display:flex; gap:10px;">
+            <button type="button" id="btn-dup-proceed" style="background:var(--red); color:#fff; border:none; padding:8px 14px; border-radius:4px; font-weight:700; font-size:12px; cursor:pointer;">Submit Anyway</button>
+            <button type="button" id="btn-dup-cancel" style="background:#ccc; color:#333; border:none; padding:8px 14px; border-radius:4px; font-weight:700; font-size:12px; cursor:pointer;">Cancel</button>
+          </div>
+        </div>
+
         <div class="submit-row">
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-report" disabled>Submit Report</button>
           <span class="hint">Reference numbers are generated instantly. Response times vary by case type.</span>
         </div>
 
         <div class="confirm-box" id="confirmBox">
           <div class="ref" id="confirmRef">Reference No. PNP-2026-000000</div>
-          <p>Your submission has been logged. Save this reference number to track its status. A duty officer typically reviews new entries within 24 hours.</p>
+          <div id="confirmTimestamp" style="font-family:'Space Mono',monospace; font-size:11.5px; color:var(--gold); margin-top:4px;">Submitted: --</div>
+          <p style="margin-top:10px;">Your submission has been received and logged under status: <strong style="color:var(--amber);">PENDING ADMIN VERIFICATION</strong>. Save this reference number to track your submission.</p>
         </div>
       </form>
       </div>
@@ -764,85 +839,333 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script>
+  let pendingSubmissionData = null;
+
+  // ===== Leaflet GPS & Interactive Map Initialization =====
+  let incidentMap = null;
+  let incidentMarker = null;
+
+  // Default coordinates: Dapitan City Center (8.6534, 123.4233)
+  const defaultLat = 8.6534;
+  const defaultLng = 123.4233;
+
+  function initMap(lat, lng) {
+    lat = lat || defaultLat;
+    lng = lng || defaultLng;
+    const container = document.getElementById('inc-map-container');
+    if (!container) return;
+
+    if (!incidentMap) {
+      incidentMap = L.map('inc-map-container').setView([lat, lng], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+      }).addTo(incidentMap);
+
+      incidentMarker = L.marker([lat, lng], { draggable: true }).addTo(incidentMap);
+
+      // On Marker drag
+      incidentMarker.on('dragend', function (e) {
+        const coord = e.target.getLatLng();
+        setMapCoordinates(coord.lat, coord.lng, "Map Pin Moved");
+      });
+
+      // On Map Click — move marker to tapped location
+      incidentMap.on('click', function (e) {
+        incidentMarker.setLatLng(e.latlng);
+        setMapCoordinates(e.latlng.lat, e.latlng.lng, "Map Pin Placed");
+      });
+    } else {
+      incidentMap.setView([lat, lng], 14);
+      incidentMarker.setLatLng([lat, lng]);
+    }
+    // Force Leaflet to recalculate container size
+    setTimeout(() => { if (incidentMap) incidentMap.invalidateSize(); }, 200);
+    setMapCoordinates(lat, lng, "Location Set");
+  }
+
+  function setMapCoordinates(lat, lng, label) {
+    label = label || "GPS Set";
+    document.getElementById('inc-lat').value = lat.toFixed(6);
+    document.getElementById('inc-lng').value = lng.toFixed(6);
+    const statusEl = document.getElementById('gps-status-text');
+    if (statusEl) {
+      statusEl.textContent = '📍 ' + label + ': Lat ' + lat.toFixed(5) + ', Lng ' + lng.toFixed(5);
+      statusEl.style.color = "var(--green)";
+    }
+  }
+
+  // Auto-Detect GPS Button
+  const btnDetectGPS = document.getElementById('btn-detect-gps');
+  if (btnDetectGPS) {
+    btnDetectGPS.addEventListener('click', function() {
+      const statusEl = document.getElementById('gps-status-text');
+      if (statusEl) statusEl.textContent = "⌛ Acquiring GPS location...";
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(pos) {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            initMap(lat, lng);
+            if (statusEl) statusEl.textContent = '✅ GPS Location Detected: ' + lat.toFixed(5) + ', ' + lng.toFixed(5);
+          },
+          function(err) {
+            console.warn("GPS Error:", err.message);
+            if (statusEl) statusEl.textContent = "⚠️ GPS Permission Denied. Please click/tap on the map to pin location.";
+            initMap(defaultLat, defaultLng);
+          },
+          { enableHighAccuracy: true, timeout: 10000 }
+        );
+      } else {
+        if (statusEl) statusEl.textContent = "⚠️ Geolocation not supported. Tap map to pin location.";
+        initMap(defaultLat, defaultLng);
+      }
+    });
+  }
+
+  // Initialize map immediately (scripts are at bottom of body — DOM is ready)
+  initMap(defaultLat, defaultLng);
+
+  // Photo Upload Preview & Validation
+  const photoInput = document.getElementById('inc-photo');
+  const photoPreviewWrap = document.getElementById('inc-photo-preview-wrap');
+  const photoPreviewImg = document.getElementById('inc-photo-preview');
+
+  if (photoInput) {
+    photoInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        if (!validTypes.includes(file.type.toLowerCase())) {
+          alert("Invalid image file format. Please upload JPG, PNG, or WEBP.");
+          photoInput.value = "";
+          photoPreviewWrap.style.display = "none";
+          return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          alert("File size exceeds 5MB limit. Please choose a smaller image.");
+          photoInput.value = "";
+          photoPreviewWrap.style.display = "none";
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          photoPreviewImg.src = ev.target.result;
+          photoPreviewWrap.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        photoPreviewWrap.style.display = "none";
+      }
+    });
+  }
+
+  // Helper: show/hide a field error
+  function showFieldError(id, show) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = show ? 'block' : 'none';
+  }
+  // Helper: highlight/unhighlight field border
+  function setFieldHighlight(id, isError) {
+    const el = document.getElementById(id);
+    if (el) el.style.borderColor = isError ? '#C0392B' : '';
+  }
+
+  function validateFormControls() {
+    const activeTab = (document.querySelector('.tab-btn.active') || {}).dataset && document.querySelector('.tab-btn.active').dataset.tab || 'incident';
+    if (activeTab === 'incident') {
+      const incTypeVal = document.getElementById('inc-type') ? document.getElementById('inc-type').value : '';
+      const incLocVal = document.getElementById('inc-location') ? document.getElementById('inc-location').value.trim() : '';
+      const incDetailsVal = document.getElementById('inc-details') ? document.getElementById('inc-details').value.trim() : '';
+      const photoAttached = photoInput && photoInput.files && photoInput.files.length > 0;
+      const isLegalAck = legalAck && legalAck.checked;
+      const isCaptcha = captchaCheck && captchaCheck.checked;
+
+      // Hide individual errors as user fills them in (real-time feedback)
+      if (incTypeVal !== '') { showFieldError('err-inc-type', false); setFieldHighlight('inc-type', false); }
+      if (incLocVal !== '') { showFieldError('err-inc-location', false); setFieldHighlight('inc-location', false); }
+      if (photoAttached) { showFieldError('err-inc-photo', false); setFieldHighlight('inc-photo', false); }
+      if (incDetailsVal !== '') { showFieldError('err-inc-details', false); setFieldHighlight('inc-details', false); }
+      if (isLegalAck) { showFieldError('err-inc-legal-ack', false); setFieldHighlight('inc-legal-ack', false); }
+      if (isCaptcha) { showFieldError('err-captcha-check', false); setFieldHighlight('captcha-check', false); }
+    }
+    // Button is always enabled — errors are shown inline on submit click
+    if (btnSubmitReport) btnSubmitReport.disabled = false;
+  }
+
+  // Function: show all inline errors on empty required fields
+  function showAllIncidentErrors() {
+    const incTypeVal = document.getElementById('inc-type') ? document.getElementById('inc-type').value : '';
+    const incLocVal = document.getElementById('inc-location') ? document.getElementById('inc-location').value.trim() : '';
+    const incDetailsVal = document.getElementById('inc-details') ? document.getElementById('inc-details').value.trim() : '';
+    const photoAttached = photoInput && photoInput.files && photoInput.files.length > 0;
+    const isLegalAck = legalAck && legalAck.checked;
+    const isCaptcha = captchaCheck && captchaCheck.checked;
+
+    let firstInvalid = null;
+    if (incTypeVal === '') {
+      showFieldError('err-inc-type', true); setFieldHighlight('inc-type', true);
+      if (!firstInvalid) firstInvalid = document.getElementById('inc-type');
+    }
+    if (incLocVal === '') {
+      showFieldError('err-inc-location', true); setFieldHighlight('inc-location', true);
+      if (!firstInvalid) firstInvalid = document.getElementById('inc-location');
+    }
+    if (!photoAttached) {
+      showFieldError('err-inc-photo', true); setFieldHighlight('inc-photo', true);
+      if (!firstInvalid) firstInvalid = document.getElementById('inc-photo');
+    }
+    if (incDetailsVal === '') {
+      showFieldError('err-inc-details', true); setFieldHighlight('inc-details', true);
+      if (!firstInvalid) firstInvalid = document.getElementById('inc-details');
+    }
+    if (!isLegalAck) {
+      showFieldError('err-inc-legal-ack', true); setFieldHighlight('inc-legal-ack', true);
+      if (!firstInvalid) firstInvalid = document.getElementById('inc-legal-ack');
+    }
+    if (!isCaptcha) {
+      showFieldError('err-captcha-check', true); setFieldHighlight('captcha-check', true);
+      if (!firstInvalid) firstInvalid = document.getElementById('captcha-check');
+    }
+    if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return (incTypeVal !== '' && incLocVal !== '' && incDetailsVal !== '' && photoAttached && isLegalAck && isCaptcha);
+  }
+
+  ['change', 'input', 'keyup'].forEach(function(evtName) {
+    const incType = document.getElementById('inc-type');
+    const incLoc = document.getElementById('inc-location');
+    const incDet = document.getElementById('inc-details');
+    if (incType) incType.addEventListener(evtName, validateFormControls);
+    if (incLoc) incLoc.addEventListener(evtName, validateFormControls);
+    if (incDet) incDet.addEventListener(evtName, validateFormControls);
+  });
+  if (photoInput) photoInput.addEventListener('change', validateFormControls);
+  if (legalAck) legalAck.addEventListener('change', validateFormControls);
+  if (captchaCheck) captchaCheck.addEventListener('change', validateFormControls);
+
   // Filter blotter entries
-  document.querySelectorAll('.filter-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       const f = btn.dataset.filter;
-      document.querySelectorAll('.entry').forEach(entry=>{
-        entry.style.display = (f==='all' || entry.dataset.cat===f) ? 'grid' : 'none';
+      document.querySelectorAll('.entry').forEach(function(entry) {
+        entry.style.display = (f === 'all' || entry.dataset.cat === f) ? 'grid' : 'none';
       });
     });
   });
 
   // Tabs
-  document.querySelectorAll('.tab-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('active'); b.setAttribute('aria-selected','false');});
-      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
       btn.classList.add('active');
-      btn.setAttribute('aria-selected','true');
-      document.querySelector('.tab-panel[data-panel="'+btn.dataset.tab+'"]').classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      document.querySelector('.tab-panel[data-panel="' + btn.dataset.tab + '"]').classList.add('active');
       document.getElementById('confirmBox').classList.remove('show');
+      validateFormControls();
+      // Refresh Leaflet map size when switching back to incident tab
+      if (btn.dataset.tab === 'incident' && incidentMap) {
+        setTimeout(function() { incidentMap.invalidateSize(); }, 100);
+      }
     });
   });
 
   // Handle tab links (e.g. hero buttons, header & footer links)
   function activateTab(tabName) {
-    const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-    if(tabBtn) {
-      tabBtn.click();
-    }
+    const tabBtn = document.querySelector('.tab-btn[data-tab="' + tabName + '"]');
+    if (tabBtn) { tabBtn.click(); }
   }
 
-  document.querySelectorAll('[data-tab-link]').forEach(link => {
-    link.addEventListener('click', () => {
+  document.querySelectorAll('[data-tab-link]').forEach(function(link) {
+    link.addEventListener('click', function() {
       const tabTarget = link.dataset.tabLink;
-      if (tabTarget) {
-        activateTab(tabTarget);
-      }
+      if (tabTarget) { activateTab(tabTarget); }
     });
   });
 
-  // Anonymous toggle hides contact fields
-  const anonBox = document.getElementById('inc-anon');
-  if(anonBox){
-    anonBox.addEventListener('change', ()=>{
-      document.getElementById('inc-contact-row').style.display = anonBox.checked ? 'none' : 'grid';
+  // Anonymous toggle hides contact fields in Feedback tab
+  const fbAnonBox = document.getElementById('fb-anon');
+  if (fbAnonBox) {
+    fbAnonBox.addEventListener('change', function() {
+      document.getElementById('fb-contact-row').style.display = fbAnonBox.checked ? 'none' : 'grid';
     });
   }
 
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
-<script>
+  // Fetch Public IP Helper
+  async function fetchPublicIP() {
+    try {
+      const res = await fetch('https://api.ipify.org?format=json');
+      const data = await res.json();
+      return data.ip;
+    } catch (e) {
+      return '127.0.0.1';
+    }
+  }
+
   // Real submission with Supabase & LocalStorage integration
   document.getElementById('intakeForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
 
     const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab || 'incident';
+
+    // Run full inline validation before proceeding
+    if (activeTab === 'incident') {
+      const isValid = showAllIncidentErrors();
+      if (!isValid) return;
+    }
+
     const ref = 'PNP-2026-' + String(Math.floor(100000 + Math.random()*899999));
     const now = new Date();
+    const isoTimestamp = now.toISOString();
     const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) + ', ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + 'H';
 
     let type = 'Incident';
     let location = 'Dapitan City';
     let details = '';
     let contact = 'Anonymous';
+    let lat = document.getElementById('inc-lat').value || defaultLat;
+    let lng = document.getElementById('inc-lng').value || defaultLng;
+    let imageUrl = null;
 
     if (activeTab === 'incident') {
+      const photoFile = photoInput.files[0];
+      try {
+        if (window.DapitanAPI && window.DapitanAPI.uploadReportImage) {
+          imageUrl = await window.DapitanAPI.uploadReportImage(photoFile);
+        }
+      } catch (uploadErr) {
+        alert(uploadErr.message);
+        return;
+      }
+
       const incType = document.getElementById('inc-type').value;
       type = 'Incident — ' + incType;
       location = document.getElementById('inc-location').value.trim() || 'Unspecified Location';
       details = document.getElementById('inc-details').value.trim() || 'No details provided.';
-      const isAnon = document.getElementById('inc-anon').checked;
-      if (!isAnon) {
-        const name = document.getElementById('inc-name').value.trim();
-        const info = document.getElementById('inc-contact').value.trim();
-        if (name || info) {
-          contact = [name, info].filter(Boolean).join(' · ');
+      const name = document.getElementById('inc-name').value.trim();
+      const info = document.getElementById('inc-contact').value.trim();
+      if (name || info) {
+        contact = [name, info].filter(Boolean).join(' · ');
+      }
+
+      // Duplicate Check Checkbox/Prompt
+      if (window.DapitanAPI && window.DapitanAPI.checkDuplicateReport && !pendingSubmissionData) {
+        const dup = await window.DapitanAPI.checkDuplicateReport(incType, lat, lng, 30, 500);
+        if (dup) {
+          const dupModal = document.getElementById('dup-notice-modal');
+          const dupText = document.getElementById('dup-notice-text');
+          dupText.textContent = `A similar report (${dup.ref} — "${dup.type}") was filed approximately ${dup.distanceMeters} meters away within the last 30 minutes.`;
+          dupModal.style.display = 'block';
+          dupModal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+          pendingSubmissionData = { ref, type, dateStr, location, details, contact, lat, lng, imageUrl, isoTimestamp };
+          return;
         }
       }
     } else if (activeTab === 'feedback') {
@@ -851,10 +1174,13 @@
       type = 'Feedback (' + rating + ')';
       location = station || 'General Feedback';
       details = document.getElementById('fb-details').value.trim() || 'No feedback details provided.';
-      const name = document.getElementById('fb-name').value.trim();
-      const info = document.getElementById('fb-contact').value.trim();
-      if (name || info) {
-        contact = [name, info].filter(Boolean).join(' · ');
+      const isFbAnon = document.getElementById('fb-anon')?.checked;
+      if (!isFbAnon) {
+        const name = document.getElementById('fb-name').value.trim();
+        const info = document.getElementById('fb-contact').value.trim();
+        if (name || info) {
+          contact = [name, info].filter(Boolean).join(' · ');
+        }
       }
     } else if (activeTab === 'commend') {
       const officer = document.getElementById('cm-officer').value.trim();
@@ -869,24 +1195,53 @@
       }
     }
 
+    await finalizeSubmission({ ref, type, dateStr, location, details, contact, lat, lng, imageUrl, isoTimestamp });
+  });
+
+  async function finalizeSubmission(dataObj) {
+    const clientIP = await fetchPublicIP();
+    const userAgent = navigator.userAgent;
+
     const newReport = {
-      ref: ref,
-      type: type,
-      date: dateStr,
-      location: location,
-      status: 'new',
-      details: details,
-      contact: contact
+      ref: dataObj.ref,
+      type: dataObj.type,
+      date: dataObj.dateStr,
+      created_at: dataObj.isoTimestamp,
+      location: dataObj.location,
+      status: 'Pending',
+      details: dataObj.details,
+      contact: dataObj.contact,
+      lat: Number(dataObj.lat),
+      lng: Number(dataObj.lng),
+      image_url: dataObj.imageUrl,
+      ip_address: clientIP,
+      user_agent: userAgent
     };
 
     if (window.DapitanAPI) {
       await window.DapitanAPI.submitReport(newReport);
     }
 
-    document.getElementById('confirmRef').textContent = 'Reference No. ' + ref;
+    document.getElementById('dup-notice-modal').style.display = 'none';
+    pendingSubmissionData = null;
+
+    document.getElementById('confirmRef').textContent = 'Reference No. ' + dataObj.ref;
+    document.getElementById('confirmTimestamp').textContent = `Logged: ${dataObj.dateStr} | Coordinates: ${Number(dataObj.lat).toFixed(4)}, ${Number(dataObj.lng).toFixed(4)}`;
     const box = document.getElementById('confirmBox');
     box.classList.add('show');
-    box.scrollIntoView({behavior:'smooth', block:'nearest'});
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Duplicate Check Modal Listeners
+  document.getElementById('btn-dup-proceed').addEventListener('click', async () => {
+    if (pendingSubmissionData) {
+      await finalizeSubmission(pendingSubmissionData);
+    }
+  });
+
+  document.getElementById('btn-dup-cancel').addEventListener('click', () => {
+    document.getElementById('dup-notice-modal').style.display = 'none';
+    pendingSubmissionData = null;
   });
 </script>
 
